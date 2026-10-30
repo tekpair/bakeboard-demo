@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { matchesTaskCategory } from '@/lib/production-library';
 import { ChevronDown, Plus, RotateCcw, Search } from 'lucide-react';
 import type { Employee, ProductionTask, Status } from '@/lib/types';
@@ -83,8 +84,12 @@ export function Board({
   const selected = tasks.find((task) => task.id === selectedId) ?? null;
 
   useEffect(() => {
+    const firstTick = window.setTimeout(() => setNow(Date.now()), 0);
     const timer = window.setInterval(() => setNow(Date.now()), 60_000);
-    return () => window.clearInterval(timer);
+    return () => {
+      window.clearTimeout(firstTick);
+      window.clearInterval(timer);
+    };
   }, []);
 
   const filtered = useMemo(
@@ -444,5 +449,38 @@ export function Board({
         />
       )}
     </>
+  );
+}
+
+export function BoardWithQuery({
+  tasks,
+  employees,
+  workspaceId,
+  initialNow,
+}: {
+  tasks: ProductionTask[];
+  employees: Employee[];
+  workspaceId: string;
+  initialNow: number;
+}) {
+  const searchParams = useSearchParams();
+  const status = searchParams.get('status');
+  const date = searchParams.get('date');
+  return (
+    <Board
+      key={searchParams.toString()}
+      tasks={tasks}
+      employees={employees}
+      workspaceId={workspaceId}
+      initialStatus={
+        columns.some((column) => column.status === status)
+          ? (status as Status)
+          : undefined
+      }
+      initialDate={date && /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : undefined}
+      initialAttention={searchParams.get('attention') === 'overdue'}
+      initialTaskId={searchParams.get('task') ?? undefined}
+      initialNow={initialNow}
+    />
   );
 }

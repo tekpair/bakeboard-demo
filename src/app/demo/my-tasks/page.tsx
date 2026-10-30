@@ -2,7 +2,6 @@ import { MyTasks } from '@/components/my-tasks';
 import { getDemoData } from '@/lib/data';
 
 export const metadata = { title: 'My Tasks' };
-export const dynamic = 'force-dynamic';
 
 export default async function MyTasksPage() {
   const { workspace, employees, tasks } = await getDemoData();

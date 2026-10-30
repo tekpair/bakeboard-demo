@@ -41,7 +41,7 @@ export default function HomePage() {
             </div>
             <figure className="hero-photo-slot">
               <Image
-                src="/production-board-hero.png"
+                src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/production-board-hero.png`}
                 alt="Illustrative bakery scene with the BakeBoard demo Production Board displayed on a laptop"
                 width={1710}
                 height={919}

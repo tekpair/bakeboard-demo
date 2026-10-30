@@ -4,7 +4,6 @@ import {
   employees,
   workspace,
 } from './demo-seed';
-import { connection } from 'next/server';
 import type { Activity, Employee, ProductionTask, Workspace } from './types';
 // Adapter boundary: replace the mock implementation with scoped Supabase queries later.
 export interface BakeryRepository {
@@ -30,7 +29,6 @@ export const bakeryRepository: BakeryRepository = {
   },
 };
 export async function getDemoData() {
-  await connection();
   const workspace = await bakeryRepository.getWorkspace();
   const [tasks, employees, activities] = await Promise.all([
     bakeryRepository.getTasks(workspace.id),

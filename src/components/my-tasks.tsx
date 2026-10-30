@@ -57,8 +57,10 @@ export function MyTasks({
   const [editingId, setEditingId] = useState<string | null>(null);
 
   useEffect(() => {
+    const firstTick = window.setTimeout(() => setNow(Date.now()), 0);
     const timer = window.setInterval(() => setNow(Date.now()), 60_000);
     return () => {
+      window.clearTimeout(firstTick);
       window.clearInterval(timer);
     };
   }, []);

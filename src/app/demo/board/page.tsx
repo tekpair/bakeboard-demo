@@ -1,29 +1,11 @@
-import { Board } from '@/components/board';
+import { BoardWithQuery } from '@/components/board';
 import { BoardTeam } from '@/components/board-team';
 import { getDemoData } from '@/lib/data';
 import { CurrentDayLabel } from '@/components/current-day-label';
-import type { Status } from '@/lib/types';
+import { Suspense } from 'react';
 export const metadata = { title: 'Production Board' };
-export default async function BoardPage({
-  searchParams,
-}: {
-  searchParams: Promise<{
-    status?: string;
-    date?: string;
-    attention?: string;
-    task?: string;
-  }>;
-}) {
+export default async function BoardPage() {
   const { tasks, employees, workspace } = await getDemoData();
-  const params = await searchParams;
-  const initialStatus = ['todo', 'progress', 'ready', 'completed'].includes(
-    params.status ?? '',
-  )
-    ? (params.status as Status)
-    : undefined;
-  const initialDate = /^\d{4}-\d{2}-\d{2}$/.test(params.date ?? '')
-    ? params.date
-    : undefined;
   // eslint-disable-next-line react-hooks/purity -- Keep overdue board filters aligned with the page's first render.
   const initialNow = Date.now();
   return (
@@ -38,16 +20,14 @@ export default async function BoardPage({
         </div>
         <BoardTeam />
       </div>
-      <Board
-        tasks={tasks}
-        employees={employees}
-        workspaceId={workspace.id}
-        initialStatus={initialStatus}
-        initialDate={initialDate}
-        initialAttention={params.attention === 'overdue'}
-        initialTaskId={params.task}
-        initialNow={initialNow}
-      />
+      <Suspense fallback={null}>
+        <BoardWithQuery
+          tasks={tasks}
+          employees={employees}
+          workspaceId={workspace.id}
+          initialNow={initialNow}
+        />
+      </Suspense>
     </main>
   );
 }

@@ -105,10 +105,12 @@ export function ProductionCalendar({
         ),
       );
     restore();
+    const firstTick = window.setTimeout(() => setNow(Date.now()), 0);
     window.addEventListener('popstate', restore);
     const timer = window.setInterval(() => setNow(Date.now()), 60_000);
     return () => {
       window.removeEventListener('popstate', restore);
+      window.clearTimeout(firstTick);
       window.clearInterval(timer);
     };
   }, [
@@ -125,7 +127,7 @@ export function ProductionCalendar({
     window.history[replace ? 'replaceState' : 'pushState'](
       null,
       '',
-      calendarHref(value),
+      `${process.env.NEXT_PUBLIC_BASE_PATH || ''}${calendarHref(value)}`,
     );
   }
   const filtered = filterCalendarTasks(
