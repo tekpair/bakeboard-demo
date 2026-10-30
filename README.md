@@ -2,7 +2,11 @@
 
 An interactive frontend demo for bakery production and staff management. Built with Next.js, React, TypeScript, and Lucide icons.
 
-## Run locally
+## Visit the public demo
+
+[Open BakeBoard](https://tekpair.github.io/bakeboard-demo/) to explore the site and sample workspace. No installation or account is needed. Each visitor's demo changes stay in their own browser.
+
+## Local development
 
 Requires Node.js 20.9 or newer and npm.
 
