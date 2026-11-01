@@ -15,7 +15,8 @@ export default async function BoardPage() {
           <CurrentDayLabel />
           <h1>Production Board</h1>
           <p className="page-description">
-            Keep production moving, from the first step to ready for pickup.
+            Track customer orders and the production work behind them, from the
+            first step to pickup.
           </p>
         </div>
         <BoardTeam />

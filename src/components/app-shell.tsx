@@ -328,7 +328,7 @@ export function AppShell({
                           aria-label="Add Production Board"
                           title="Add Production Board"
                           onClick={() => {
-                            if (plan === 'Free') setUpgradeBoardsOpen(true);
+                            if (plan === 'Starter') setUpgradeBoardsOpen(true);
                           }}
                         >
                           <Plus size={15} aria-hidden="true" />
@@ -401,9 +401,9 @@ export function AppShell({
           </>
         )}
         <div className="sidebar-bottom">
-          {ready && plan === 'Free' && (
+          {ready && plan === 'Starter' && (
             <div className="sidebar-upgrade sidebar-text">
-              <h4>Free Plan</h4>
+              <h4>Starter Preview</h4>
               <Link href="/pricing">
                 Explore Plus <ArrowUpRight size={14} />
               </Link>
@@ -491,7 +491,7 @@ export function AppShell({
                         selectPlan(event.target.value);
                     }}
                   >
-                    <option>Free</option>
+                    <option>Starter</option>
                     <option>Plus</option>
                   </select>
                 </label>

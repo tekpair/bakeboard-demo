@@ -776,7 +776,7 @@ export function libraryChangeEventName() {
   return LIBRARY_CHANGE_EVENT;
 }
 export function readWorkspacePlan(): WorkspacePlan {
-  const actual = readStoredWorkspaceSettings().plan ?? 'Free';
+  const actual = readStoredWorkspaceSettings().plan ?? 'Starter';
   if (typeof window === 'undefined') return actual;
   try {
     const session = JSON.parse(

@@ -7,7 +7,7 @@ export const productCategories = [
 ] as const;
 // Seed labels are retained for migration; workspace categories are managed in the library.
 export type Category = string;
-export type WorkspacePlan = 'Free' | 'Plus';
+export type WorkspacePlan = 'Starter' | 'Plus';
 export type WorkspaceRole =
   'owner' | 'manager' | 'lead' | 'employee' | 'viewer';
 export interface Employee {

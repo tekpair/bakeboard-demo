@@ -19,15 +19,16 @@ export function PricingPlans({ compact = false }: { compact?: boolean }) {
           className={yearly ? 'selected' : ''}
           onClick={() => setYearly(true)}
         >
-          Yearly <span>Save 18%</span>
+          Yearly <span>Save about 18%</span>
         </button>
       </div>
       <div className="pricing-grid">
         {[
           {
-            name: 'Free',
-            price: '0',
-            sub: '',
+            name: 'Starter',
+            price: yearly ? '39' : '3.99',
+            sub: yearly ? 'year' : 'month',
+            trial: '14-day free trial planned for launch',
             features: [
               '1 bakery workspace',
               'Up to 3 staff members',
@@ -39,10 +40,11 @@ export function PricingPlans({ compact = false }: { compact?: boolean }) {
           {
             name: 'Plus',
             price: yearly ? '79' : '7.99',
-            sub: yearly ? 'per year' : 'per month',
+            sub: yearly ? 'year' : 'month',
+            trial: '',
             features: [
-              'Everything in Free',
-              '2 workspaces & up to 15 staff members',
+              'Everything in Starter',
+              '1 bakery workspace & up to 15 staff members',
               '2 Production Boards',
               'Reusable production checklist templates',
               'Workspace themes & email reminders',
@@ -52,7 +54,7 @@ export function PricingPlans({ compact = false }: { compact?: boolean }) {
           <article
             className={`price-card ${i ? 'price-plus' : ''}`}
             key={p.name}
-            id={i ? 'plus' : 'free'}
+            id={i ? 'plus' : 'starter'}
           >
             <div className="plan-heading">
               <h3>BakeBoard {p.name}</h3>
@@ -61,6 +63,7 @@ export function PricingPlans({ compact = false }: { compact?: boolean }) {
               <strong>${p.price}</strong>
               {p.sub && <span>/{p.sub}</span>}
             </div>
+            <p className="plan-trial">{p.trial || '\u00a0'}</p>
             <Link
               href={i ? '/demo/overview?previewPlan=Plus' : '/demo/overview'}
               className={`button ${i ? 'button-primary' : 'button-outline'}`}
@@ -82,6 +85,10 @@ export function PricingPlans({ compact = false }: { compact?: boolean }) {
           </article>
         ))}
       </div>
+      <p className="pricing-preview-note">
+        Plans and the Starter trial are previews. Subscriptions are not
+        available in the demo.
+      </p>
     </div>
   );
 }

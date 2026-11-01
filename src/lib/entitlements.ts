@@ -1,8 +1,8 @@
 import type { WorkspacePlan } from './types';
 export const planEntitlements = {
-  Free: {
+  Starter: {
     workspaces: 1,
-    additionalStaff: 3,
+    staffMembers: 3,
     boards: 1,
     products: true,
     templates: false,
@@ -10,8 +10,8 @@ export const planEntitlements = {
     reminders: false,
   },
   Plus: {
-    workspaces: 3,
-    additionalStaff: 15,
+    workspaces: 1,
+    staffMembers: 15,
     boards: 2,
     products: true,
     templates: true,
@@ -22,7 +22,7 @@ export const planEntitlements = {
 export type PlanCapability =
   'products' | 'templates' | 'personalization' | 'reminders';
 export function isWorkspacePlan(value: unknown): value is WorkspacePlan {
-  return value === 'Free' || value === 'Plus';
+  return value === 'Starter' || value === 'Plus';
 }
 export function hasPlanCapability(
   plan: WorkspacePlan,

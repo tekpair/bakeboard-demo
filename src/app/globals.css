@@ -557,6 +557,20 @@ ol {
   font-size: 13px;
   color: var(--muted);
 }
+.plan-trial {
+  min-height: 18px;
+  margin: 5px 0 12px;
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 600;
+}
+.pricing-preview-note {
+  margin: 16px auto 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+}
 .price-card > .button {
   width: 100%;
 }

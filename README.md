@@ -1,6 +1,6 @@
 # BakeBoard Demo
 
-An interactive frontend demo for bakery production and staff management. Built with Next.js, React, TypeScript, and Lucide icons.
+An interactive frontend demo for bakery production and customer order tracking. BakeBoard helps bakery owners and staff organize orders received elsewhere and the production work behind them; it does not take orders or payments. Built with Next.js, React, TypeScript, and Lucide icons.
 
 ## Visit the public demo
 
@@ -23,7 +23,7 @@ Open [http://localhost:3000](http://localhost:3000). To use another port: `npm r
 - Workspace Overview, Production Board, Calendar, and My Tasks
 - Production Library for products, categories, and checklist templates
 - Staff Management and Workspace Settings
-- Demo role and Free/Plus plan previews
+- Demo role and Starter/Plus plan previews
 
 Demo changes are saved in the current browser's local storage. **Reset Demo** restores the sample workspace. There is no backend, real authentication, email delivery, payment processing, or live subscription enforcement. Role restrictions are a frontend simulation and must not be treated as secure authorization.
 
@@ -35,4 +35,4 @@ npm run typecheck
 npm run build
 ```
 
-The site is not an online ordering or checkout system. It helps bakeries organize production work and coordinate staff.
+The planned Starter plan is $3.99/month or $39/year with a 14-day free trial at launch. Plus is $7.99/month or $79/year. Each subscription is planned for one bakery workspace; individual staff accounts may later belong to multiple bakeries. Plans and billing are previews only and cannot be purchased in the demo.

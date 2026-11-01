@@ -11,7 +11,7 @@ export const workspace: Workspace = {
   id: 'ws-willow-rye',
   name: 'Willow & Rye Bakery',
   initials: 'WR',
-  plan: 'Free',
+  plan: 'Starter',
 };
 
 export const employees: Employee[] = [

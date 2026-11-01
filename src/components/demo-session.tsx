@@ -165,7 +165,7 @@ export function DemoSessionProvider({
   }
   const accessRevoked =
     ready && !hasWorkspaceAccess(employees, session.employeeId);
-  const plan = session.planPreview ?? workspaceSettings.plan ?? 'Free';
+  const plan = session.planPreview ?? workspaceSettings.plan ?? 'Starter';
   return (
     <DemoSessionContext.Provider
       value={{
@@ -279,10 +279,9 @@ export function DemoSessionProvider({
           const exists = employees.some((person) => person.id === next.id);
           if (
             !exists &&
-            employees.filter((person) => person.role !== 'owner').length >=
-              planEntitlements[plan].additionalStaff
+            employees.length >= planEntitlements[plan].staffMembers
           )
-            return `This plan supports up to ${planEntitlements[plan].additionalStaff} additional staff members. Existing members are kept.`;
+            return `This plan supports up to ${planEntitlements[plan].staffMembers} staff members, including the Owner. Existing members are kept.`;
           const current = employees.find((person) => person.id === next.id);
           const inviter =
             employees.find((person) => person.id === session.employeeId) ??
@@ -374,5 +373,5 @@ export function useProductionLibraryData() {
 }
 export function useWorkspacePlan() {
   const session = useOptionalDemoSession();
-  return session?.plan ?? defaultSettings.plan ?? 'Free';
+  return session?.plan ?? defaultSettings.plan ?? 'Starter';
 }

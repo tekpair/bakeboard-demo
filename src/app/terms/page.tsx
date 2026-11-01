@@ -17,7 +17,7 @@ const sections = [
   ['intellectual-property', 'Intellectual property'],
   ['your-content', 'Your content'],
   ['feedback', 'Feedback and suggestions'],
-  ['plans', 'Free and Plus plans'],
+  ['plans', 'Starter and Plus plans'],
   ['availability', 'Service availability and changes'],
   ['restriction', 'Restriction of access'],
   ['privacy', 'Privacy and data handling'],
@@ -93,12 +93,12 @@ export default function TermsPage() {
             <section id="description">
               <h2>2. Description of BakeBoard</h2>
               <p>
-                BakeBoard is designed to help bakeries organize production tasks
-                and checklists, coordinate staff assignments, follow task
-                progress, view schedules and deadlines, and manage related
-                workspace information and preferences. It is a production and
-                team management tool, not a customer ordering, checkout, or
-                payment-processing service.
+                BakeBoard is designed to help bakeries track customer orders
+                they receive outside the Service and manage the production work
+                that follows. It brings task details, checklists, staff
+                assignments, progress, deadlines, and pickups into a shared
+                bakery workspace. The Service does not take or accept customer
+                orders, provide checkout, or process payments.
               </p>
               <p>
                 At present, the Service is an interactive demo. Descriptions of
@@ -111,7 +111,7 @@ export default function TermsPage() {
               <h2>3. Demo availability and limitations</h2>
               <p>
                 The demo is provided for exploration and evaluation. Its sample
-                workspaces, employees, roles, invitations, and plan controls are
+                workspace, employees, roles, invitations, and plan controls are
                 simulated. Business registration, individual employee sign-in,
                 real invitation delivery, and paid subscriptions are not active.
                 Demo role restrictions are a preview of possible permissions,
@@ -215,23 +215,23 @@ export default function TermsPage() {
             </section>
 
             <section id="plans">
-              <h2>10. Free and Plus plans</h2>
+              <h2>10. Starter and Plus plans</h2>
               <p>
-                The Website describes proposed BakeBoard Free and BakeBoard Plus
-                offerings. The Free preview includes a bakery workspace, a
-                Production Board with task cards, a calendar, staff management,
-                basic roles, and a product catalog. The Plus preview shows
-                expanded workspace and team limits and features such as reusable
-                checklists, workspace themes, and email reminder settings.
-                Current descriptions and displayed prices are previews, not an
-                offer of an active paid subscription or a guarantee of future
-                features or pricing.
+                The Website describes planned BakeBoard Starter and BakeBoard
+                Plus offerings. Starter is shown at $3.99 per month or $39 per
+                year, with a 14-day free trial planned for launch. Plus is shown
+                at $7.99 per month or $79 per year. Each subscription is planned
+                to cover one bakery workspace. Plus previews a larger team
+                limit, a second Production Board, reusable checklist templates,
+                workspace themes, and email reminder settings. These plan
+                descriptions and prices are previews, not an active subscription
+                offer or a guarantee of final launch terms.
               </p>
               <p>
-                You cannot purchase Plus or start a paid subscription through
-                the current Service. If paid services become available,
-                applicable billing, renewal, cancellation, and other
-                subscription terms will be provided before purchase.
+                You cannot begin the Starter trial or purchase either plan
+                through the current Service. If paid services become available,
+                applicable billing, renewal, cancellation, and trial terms will
+                be provided before enrollment.
               </p>
             </section>
 

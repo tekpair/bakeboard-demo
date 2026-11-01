@@ -64,12 +64,13 @@ export default function PrivacyPage() {
             <section id="introduction">
               <h2>1. Introduction</h2>
               <p>
-                BakeBoard is an internal bakery production and team management
-                tool. This Privacy Policy explains how information is handled
-                when you visit our website or use the interactive BakeBoard
-                demo. The service is under development. Business accounts,
-                employee sign-in, subscriptions, and online storage for bakery
-                work are not available yet.
+                BakeBoard is a bakery production and customer order tracking
+                tool for owners and staff. It does not take customer orders or
+                process payments. This Privacy Policy explains how information
+                is handled when you visit our website or use the interactive
+                BakeBoard demo. The service is under development. Business
+                accounts, employee sign-in, subscriptions, and online storage
+                for bakery work are not available yet.
               </p>
               <p>
                 The demo lets you explore production and team features without

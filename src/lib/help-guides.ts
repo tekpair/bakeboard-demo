@@ -15,7 +15,7 @@ export const starterGuides: HelpGuide[] = [
     summary: 'Explore the demo workspace and learn where to begin.',
     category: 'Getting started',
     content:
-      "Getting started with BakeBoard is simple! Click the **Try Free Demo** button to explore an interactive sample bakery workspace.\n\nStart on the **Overview** page, where you'll find a snapshot of the day's production, upcoming pickups and arrivals, tasks that need attention, and recent staff activity—all in one convenient place.\n\nFrom there, head to the **Production Board** to explore how tasks are organized into four stages: **To Do**, **In Progress**, **Ready**, and **Completed**. Select any task card to view its details, check production progress, and explore its available actions.\n\nFeel free to experiment! The interactive demo saves your changes directly in your browser, so you can explore BakeBoard at your own pace. Whenever you'd like to start fresh, simply use the **Reset Demo** button in the sidebar to restore the original sample workspace.",
+      "Getting started with BakeBoard is simple! Click the **Try Free Demo** button to explore an interactive sample bakery workspace. BakeBoard helps you track customer orders received elsewhere and the production work behind them; customers cannot place orders or pay through BakeBoard.\n\nStart on the **Overview** page, where you'll find a snapshot of the day's production, upcoming pickups and arrivals, tasks that need attention, and recent staff activity—all in one convenient place.\n\nFrom there, head to the **Production Board** to explore how tasks are organized into four stages: **To Do**, **In Progress**, **Ready**, and **Completed**. Select any task card to view its details, check production progress, and explore its available actions.\n\nFeel free to experiment! The interactive demo saves your changes directly in your browser, so you can explore BakeBoard at your own pace. Whenever you'd like to start fresh, simply use the **Reset Demo** button in the sidebar to restore the original sample workspace.",
     published: true,
     updatedAt: '2026-10-27T12:00:00.000Z',
   },
@@ -124,7 +124,7 @@ Set the default task priority and deadline warning threshold. The built-in produ
 
 ### Appearance and reminders
 
-**Appearance & Personalization** offers preset themes with the **Plus** preview. The Free preview can see the available themes but cannot apply them. **Notifications & Reminders** lets Plus previews configure email reminder timing, types, and recipients. **No reminder emails are sent in the interactive demo.**
+**Appearance & Personalization** offers preset themes with the **Plus** preview. The Starter preview can see the available themes but cannot apply them. **Notifications & Reminders** lets Plus previews configure email reminder timing, types, and recipients. **No reminder emails are sent in the interactive demo.**
 
 ### Workspace information and saving
 
@@ -187,7 +187,7 @@ Select **Save Changes** to apply the settings, or **Cancel** to discard your edi
 
 ### Open the theme settings
 
-Select your name and role at the bottom of the sidebar. In the demo controls, set **Preview plan** to **Plus**. Then open **Workspace Settings** under **Management** and scroll to **Appearance & Personalization**. In the Free preview, you can see the themes but cannot apply them.
+Select your name and role at the bottom of the sidebar. In the demo controls, set **Preview plan** to **Plus**. Then open **Workspace Settings** under **Management** and scroll to **Appearance & Personalization**. In the Starter preview, you can see the themes but cannot apply them.
 
 ### Choose a preset
 

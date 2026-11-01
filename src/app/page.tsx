@@ -25,9 +25,9 @@ export default function HomePage() {
                 <em>Beautifully</em> organized.
               </h1>
               <p>
-                A free, easy-to-use production board built for everyday bakers.
-                Everyone knows what needs to get done, who&apos;s responsible,
-                and what&apos;s coming next.
+                Track the customer orders you already have and the production
+                work behind them. Keep details, staff, deadlines, and pickups
+                together in one clear workspace.
               </p>
               <div className="hero-actions">
                 <DemoLink />
@@ -65,8 +65,8 @@ export default function HomePage() {
                 <li>A pickup time sneaking up on you.</li>
               </ul>
               <p>
-                BakeBoard brings the day’s work together so everyone knows what
-                needs to happen next.
+                BakeBoard bridges the gap between paper notes and a shared
+                production plan, so everyone knows what needs to happen next.
               </p>
             </div>
           </div>
@@ -82,8 +82,9 @@ export default function HomePage() {
                 Clearer handoffs.
               </h2>
               <p>
-                Give everyone one clear picture of what’s happening, so you can
-                spend less time chasing updates and more time baking.
+                Bring customer order details and production progress into one
+                shared view, so you spend less time chasing updates and more
+                time baking.
               </p>
             </div>
             <div className="feature-list">

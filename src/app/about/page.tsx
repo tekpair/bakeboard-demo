@@ -74,13 +74,13 @@ export default function AboutPage() {
             </div>
             <div className="about-section-copy">
               <p>
-                BakeBoard is designed to bring daily bakery production together
-                in one place.
+                BakeBoard is designed to bring customer order tracking and daily
+                bakery production together in one place.
               </p>
               <p>
-                Track what needs to be made, assign work to your team, follow
-                progress, manage checklists, and stay ahead of important
-                deadlines.
+                Record the details of orders your bakery has already received,
+                assign production work to your team, follow progress, and stay
+                ahead of deadlines and pickups.
               </p>
               <p>
                 Whether you&apos;re a small bakery with a few employees or a
@@ -92,8 +92,8 @@ export default function AboutPage() {
               <div className="about-difference">
                 <h3>Made for the work behind the bakes.</h3>
                 <p>
-                  A shared view of prep, decorating, and handoffs, shaped around
-                  how bakery teams actually work.
+                  A shared view of customer order details, prep, decorating, and
+                  handoffs, shaped around how bakery teams actually work.
                 </p>
               </div>
             </div>
@@ -126,7 +126,7 @@ export default function AboutPage() {
             <h2>What would make your bakery&apos;s day easier?</h2>
             <p>We&apos;d love to hear your ideas.</p>
             <div className="about-actions">
-              <DemoLink>Explore the Free Demo</DemoLink>
+              <DemoLink>Try Free Demo</DemoLink>
               <a
                 className="button button-outline"
                 href="mailto:hello@bakeboard.co?subject=BakeBoard%20feedback&body=What%20would%20make%20your%20bakery%27s%20day%20easier%3F%0A%0A"

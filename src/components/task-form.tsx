@@ -293,7 +293,7 @@ export function TaskForm({
               maxLength={500}
               value={draft.description}
               onChange={(event) => update('description', event.target.value)}
-              placeholder="What is this order for?"
+              placeholder="Production details and finishing instructions"
             />
             {errors.description && (
               <span id="description-error" className="field-error">
@@ -476,7 +476,7 @@ export function TaskForm({
             </select>
           </label>
           <label className="form-field">
-            Linked order ID (optional){' '}
+            Customer order reference (optional){' '}
             <input
               maxLength={50}
               value={draft.orderId}

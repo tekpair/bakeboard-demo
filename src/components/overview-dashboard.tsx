@@ -278,7 +278,8 @@ export function OverviewDashboard({
             greetingName={session.employee.name.split(' ')[0]}
           />
           <p className="page-description">
-            Keep an eye on production, pickups, and your team’s progress.
+            Keep customer orders, production, pickups, and team progress in
+            view.
           </p>
         </div>
         <label className="overview-date-picker">
