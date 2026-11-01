@@ -97,10 +97,6 @@ export function PricingPlans({ compact = false }: { compact?: boolean }) {
           </article>
         ))}
       </div>
-      <p className="pricing-preview-note">
-        Plans and the Starter trial are previews. Subscriptions are not
-        available in the demo.
-      </p>
     </div>
   );
 }

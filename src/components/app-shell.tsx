@@ -18,6 +18,7 @@ import {
   Menu,
   Plus,
   RotateCcw,
+  Sparkles,
   X,
 } from 'lucide-react';
 import { WorkspaceAvatar } from './workspace-avatar';
@@ -403,10 +404,15 @@ export function AppShell({
         <div className="sidebar-bottom">
           {ready && plan === 'Starter' && (
             <div className="sidebar-upgrade sidebar-text">
-              <h4>Starter Preview</h4>
-              <Link href="/pricing">
-                Explore Plus <ArrowUpRight size={14} />
-              </Link>
+              <div>
+                <h4>Starter Preview</h4>
+                <Link href="/pricing">
+                  Explore Plus <ArrowUpRight size={14} />
+                </Link>
+              </div>
+              <span className="sidebar-upgrade-badge" aria-hidden="true">
+                <Sparkles size={18} />
+              </span>
             </div>
           )}
           <Link

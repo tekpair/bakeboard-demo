@@ -1555,11 +1555,26 @@ ol {
   padding-top: 20px;
 }
 .sidebar-upgrade {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
   margin: 0 2px 8px;
   padding: 11px 10px 12px;
   border: 1px solid var(--workspace-border);
   border-radius: 8px;
   background: #eaf0e6;
+}
+.sidebar-upgrade-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  background: var(--green);
+  color: #fff;
 }
 .sidebar-upgrade h4 {
   font-size: 9px;
@@ -3077,7 +3092,7 @@ progress::-moz-progress-bar {
     display: flex;
   }
   .mobile-navigation-open .sidebar-upgrade {
-    display: block;
+    display: flex;
   }
   .mobile-navigation-open .user-profile {
     justify-content: start;
