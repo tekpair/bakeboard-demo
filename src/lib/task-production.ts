@@ -32,10 +32,12 @@ export function normalizeProductionTask(task: ProductionTask): ProductionTask {
 }
 export function productionSummary(task: ProductionTask) {
   return task.productionQuantity !== undefined
-    ? [String(task.productionQuantity), task.size, task.flavor]
+    ? [`Quantity: ${task.productionQuantity}`, task.size, task.flavor]
         .filter(Boolean)
         .join(' · ')
-    : task.quantity;
+    : task.quantity
+      ? `Quantity: ${task.quantity}`
+      : undefined;
 }
 export function schedulingError(due: string, pickup?: string) {
   return pickup && Date.parse(due) > Date.parse(pickup)

@@ -11,7 +11,28 @@ import {
   useProductionLibraryData,
   useWorkspacePreferences,
 } from './demo-session';
-import { ChefHat, ClipboardList, Plus, Trash2, X } from 'lucide-react';
+import {
+  CalendarClock,
+  CakeSlice,
+  ChefHat,
+  ClipboardList,
+  Columns3,
+  CookingPot,
+  FileText,
+  Flag,
+  Hash,
+  ListChecks,
+  Package,
+  Plus,
+  Ruler,
+  StickyNote,
+  Trash2,
+  TriangleAlert,
+  Truck,
+  UserRound,
+  UsersRound,
+  X,
+} from 'lucide-react';
 import type { Employee, ProductionTask, Status } from '@/lib/types';
 import {
   parseProductionDateTime,
@@ -323,412 +344,511 @@ export function TaskForm({
               {error}
             </p>
           )}
-          <fieldset className="task-type-selector form-field-full">
-            <legend>Task type</legend>
-            {(
-              [
-                {
-                  value: 'general_production',
-                  label: 'General Production',
-                  Icon: ChefHat,
-                },
-                {
-                  value: 'customer_related',
-                  label: 'Customer Production',
-                  Icon: ClipboardList,
-                },
-              ] as const
-            ).map(({ value, label, Icon }) => (
-              <label
-                key={value}
-                className={draft.taskType === value ? 'selected' : ''}
-              >
-                <input
-                  type="radio"
-                  name="taskType"
-                  value={value}
-                  checked={draft.taskType === value}
-                  onChange={() => update('taskType', value)}
-                />
-                <Icon size={17} aria-hidden="true" />
-                {label}
-              </label>
-            ))}
-          </fieldset>
-          <label
-            className={`form-field form-field-full ${errors.title ? 'has-error' : ''}`}
+          <section
+            className="task-form-group"
+            aria-labelledby="task-details-heading"
           >
-            Task name{' '}
-            <input
-              required
-              className={errors.title ? 'field-invalid' : undefined}
-              aria-invalid={Boolean(errors.title)}
-              aria-describedby={errors.title ? 'title-error' : undefined}
-              maxLength={100}
-              value={draft.title}
-              onChange={(event) => update('title', event.target.value)}
-              placeholder="e.g. Lemon layer cake"
-            />
-            {errors.title && (
-              <span id="title-error" className="field-error">
-                {errors.title}
-              </span>
-            )}
-          </label>
-          <label
-            className={`form-field form-field-full ${errors.description ? 'has-error' : ''}`}
-          >
-            Description (optional){' '}
-            <textarea
-              className={errors.description ? 'field-invalid' : undefined}
-              aria-invalid={Boolean(errors.description)}
-              aria-describedby={
-                errors.description ? 'description-error' : undefined
-              }
-              rows={2}
-              maxLength={500}
-              value={draft.description}
-              onChange={(event) => update('description', event.target.value)}
-              placeholder="Describe what needs to be prepared or completed..."
-            />
-            {errors.description && (
-              <span id="description-error" className="field-error">
-                {errors.description}
-              </span>
-            )}
-          </label>
-          <label
-            className={`form-field ${errors.productId ? 'has-error' : ''}`}
-          >
-            Product
-            <select
-              value={draft.productId}
-              aria-invalid={!!errors.productId}
-              aria-describedby={errors.productId ? 'product-error' : undefined}
-              className={errors.productId ? 'field-invalid' : undefined}
-              onChange={(event) => {
-                const product = library.products.find(
-                  (item) => item.id === event.target.value,
-                );
-                if (product) {
-                  update('productId', product.id);
-                  update(
-                    'category',
-                    recordCategory(product, library.categories)?.name ??
-                      product.category,
-                  );
-                  update(
-                    'categoryId',
-                    recordCategory(product, library.categories)?.id,
-                  );
-                }
-              }}
-            >
-              {!draft.productId && (
-                <option value="">No active products available</option>
-              )}
-              {library.products
-                .filter(
-                  (product) =>
-                    isSelectableProduct(product, library.categories) ||
-                    product.id ===
-                      (task?.productId ??
-                        (task ? legacyProductId(task.category) : undefined)),
-                )
-                .map((product) => (
-                  <option
-                    key={product.id}
-                    value={product.id}
-                    disabled={!isSelectableProduct(product, library.categories)}
-                  >
-                    {product.name}
-                    {!isSelectableProduct(product, library.categories)
-                      ? ' (Inactive · existing product/category)'
-                      : ''}
-                  </option>
-                ))}
-              {draft.productId &&
-                !library.products.some(
-                  (product) => product.id === draft.productId,
-                ) && (
-                  <option value={draft.productId} disabled>
-                    {task?.productName ?? task?.category} (unavailable)
-                  </option>
-                )}
-            </select>
-            {errors.productId && (
-              <span id="product-error" className="field-error">
-                {errors.productId}
-              </span>
-            )}
-          </label>
-          {(['productionQuantity', 'size', 'flavor'] as const).map((field) => (
+            <h3 id="task-details-heading" className="task-form-group-heading">
+              <ClipboardList size={17} aria-hidden="true" />
+              Task Details
+            </h3>
+            <fieldset className="task-type-selector form-field-full">
+              <legend>Task type</legend>
+              {(
+                [
+                  {
+                    value: 'general_production',
+                    label: 'General Production',
+                    Icon: ChefHat,
+                  },
+                  {
+                    value: 'customer_related',
+                    label: 'Customer Production',
+                    Icon: ClipboardList,
+                  },
+                ] as const
+              ).map(({ value, label, Icon }) => (
+                <label
+                  key={value}
+                  className={draft.taskType === value ? 'selected' : ''}
+                >
+                  <input
+                    type="radio"
+                    name="taskType"
+                    value={value}
+                    checked={draft.taskType === value}
+                    onChange={() => update('taskType', value)}
+                  />
+                  <Icon size={17} aria-hidden="true" />
+                  {label}
+                </label>
+              ))}
+            </fieldset>
             <label
-              className={`form-field ${errors[field as keyof FieldErrors] ? 'has-error' : ''}`}
-              key={field}
+              className={`form-field form-field-full ${errors.title ? 'has-error' : ''}`}
             >
-              {field === 'productionQuantity'
-                ? 'Quantity'
-                : field === 'size'
-                  ? 'Size / Dimensions (optional)'
-                  : 'Flavor / Filling (optional)'}
+              <span className="task-field-label">
+                <ClipboardList size={15} aria-hidden="true" />
+                Task name
+              </span>
               <input
-                type={field === 'productionQuantity' ? 'number' : 'text'}
-                min={field === 'productionQuantity' ? 1 : undefined}
-                step={field === 'productionQuantity' ? 1 : undefined}
-                maxLength={150}
-                value={draft[field]}
-                aria-invalid={!!errors[field as keyof FieldErrors]}
-                onChange={(e) => update(field, e.target.value)}
+                required
+                className={errors.title ? 'field-invalid' : undefined}
+                aria-invalid={Boolean(errors.title)}
+                aria-describedby={errors.title ? 'title-error' : undefined}
+                maxLength={100}
+                value={draft.title}
+                onChange={(event) => update('title', event.target.value)}
+                placeholder="e.g. Lemon layer cake"
               />
-              {errors[field as keyof FieldErrors] && (
-                <span className="field-error">
-                  {errors[field as keyof FieldErrors]}
+              {errors.title && (
+                <span id="title-error" className="field-error">
+                  {errors.title}
                 </span>
               )}
             </label>
-          ))}
-          <label className="form-field">
-            Production Due ({formTimeZone}){' '}
-            <input
-              required
-              type="datetime-local"
-              className={errors.deadline ? 'field-invalid' : undefined}
-              aria-invalid={Boolean(errors.deadline)}
-              aria-describedby={errors.deadline ? 'deadline-error' : undefined}
-              value={draft.deadline}
-              onChange={(event) => update('deadline', event.target.value)}
-            />
-            {errors.deadline && (
-              <span id="deadline-error" className="field-error">
-                {errors.deadline}
-              </span>
-            )}
-          </label>
-          {draft.taskType === 'customer_related' && (
             <label
-              className={`form-field ${errors.pickupAt ? 'has-error' : ''}`}
+              className={`form-field form-field-full ${errors.description ? 'has-error' : ''}`}
             >
-              Pickup / Delivery Date &amp; Time (optional)
-              <input
-                type="datetime-local"
-                value={draft.pickupAt}
-                aria-invalid={!!errors.pickupAt}
-                onChange={(e) => update('pickupAt', e.target.value)}
+              <span className="task-field-label">
+                <FileText size={15} aria-hidden="true" />
+                Description (optional)
+              </span>
+              <textarea
+                className={errors.description ? 'field-invalid' : undefined}
+                aria-invalid={Boolean(errors.description)}
+                aria-describedby={
+                  errors.description ? 'description-error' : undefined
+                }
+                rows={2}
+                maxLength={500}
+                value={draft.description}
+                onChange={(event) => update('description', event.target.value)}
+                placeholder="Describe what needs to be prepared or completed..."
               />
-              {errors.pickupAt && (
-                <span className="field-error">{errors.pickupAt}</span>
+              {errors.description && (
+                <span id="description-error" className="field-error">
+                  {errors.description}
+                </span>
               )}
             </label>
-          )}
-          <fieldset
-            className={`staff-assignment form-field-full ${errors.assigneeIds ? 'has-error' : ''}`}
-            aria-describedby={errors.assigneeIds ? 'assignee-error' : undefined}
-          >
-            <legend>Assign to staff</legend>
-            <div className="staff-assignment-options">
-              {employees
-                .filter(
-                  (employee) =>
-                    employee.active !== false ||
-                    task?.assigneeIds.includes(employee.id),
-                )
-                .map((employee) => (
-                  <label key={employee.id}>
-                    <input
-                      type="checkbox"
-                      disabled={employee.active === false}
-                      checked={draft.assigneeIds.includes(employee.id)}
-                      onChange={(event) => {
-                        const assigneeIds = event.target.checked
-                          ? [...draft.assigneeIds, employee.id]
-                          : draft.assigneeIds.filter(
-                              (id) => id !== employee.id,
-                            );
-                        update('assigneeIds', assigneeIds);
-                      }}
-                    />
-                    {employee.name}
-                    {employee.active === false
-                      ? ' (Inactive · existing assignment)'
-                      : ''}
-                  </label>
-                ))}
-            </div>
-            {!employees.some((employee) => employee.active !== false) && (
-              <p className="field-error">
-                No active staff members. Reactivate or add a staff member before
-                assigning new work.
-              </p>
-            )}
-            {errors.assigneeIds && (
-              <span id="assignee-error" className="field-error">
-                {errors.assigneeIds}
+            <label
+              className={`form-field ${errors.productId ? 'has-error' : ''}`}
+            >
+              <span className="task-field-label">
+                <Package size={15} aria-hidden="true" />
+                Product
               </span>
-            )}
-          </fieldset>
-          <label className="form-field">
-            Priority{' '}
-            <select
-              value={draft.priority}
-              onChange={(event) =>
-                update('priority', event.target.value as Draft['priority'])
-              }
-            >
-              <option>Low</option>
-              <option>Normal</option>
-              <option>High</option>
-            </select>
-          </label>
-          <label className="form-field">
-            Status{' '}
-            <select
-              value={draft.status}
-              onChange={(event) =>
-                update('status', event.target.value as Status)
-              }
-            >
-              {statuses.map((status) => (
-                <option key={status.value} value={status.value}>
-                  {status.label}
-                </option>
-              ))}
-            </select>
-          </label>
-          {draft.taskType === 'customer_related' && (
-            <>
-              <label
-                className={`form-field ${errors.customer ? 'has-error' : ''}`}
-              >
-                Customer name (optional){' '}
-                <input
-                  className={errors.customer ? 'field-invalid' : undefined}
-                  aria-invalid={Boolean(errors.customer)}
-                  aria-describedby={
-                    errors.customer ? 'customer-error' : undefined
+              <select
+                value={draft.productId}
+                aria-invalid={!!errors.productId}
+                aria-describedby={
+                  errors.productId ? 'product-error' : undefined
+                }
+                className={errors.productId ? 'field-invalid' : undefined}
+                onChange={(event) => {
+                  const product = library.products.find(
+                    (item) => item.id === event.target.value,
+                  );
+                  if (product) {
+                    update('productId', product.id);
+                    update(
+                      'category',
+                      recordCategory(product, library.categories)?.name ??
+                        product.category,
+                    );
+                    update(
+                      'categoryId',
+                      recordCategory(product, library.categories)?.id,
+                    );
                   }
-                  maxLength={100}
-                  value={draft.customer}
-                  onChange={(event) => update('customer', event.target.value)}
-                  placeholder="Customer or counter"
-                />
-                {errors.customer && (
-                  <span id="customer-error" className="field-error">
-                    {errors.customer}
+                }}
+              >
+                {!draft.productId && (
+                  <option value="">No active products available</option>
+                )}
+                {library.products
+                  .filter(
+                    (product) =>
+                      isSelectableProduct(product, library.categories) ||
+                      product.id ===
+                        (task?.productId ??
+                          (task ? legacyProductId(task.category) : undefined)),
+                  )
+                  .map((product) => (
+                    <option
+                      key={product.id}
+                      value={product.id}
+                      disabled={
+                        !isSelectableProduct(product, library.categories)
+                      }
+                    >
+                      {product.name}
+                      {!isSelectableProduct(product, library.categories)
+                        ? ' (Inactive · existing product/category)'
+                        : ''}
+                    </option>
+                  ))}
+                {draft.productId &&
+                  !library.products.some(
+                    (product) => product.id === draft.productId,
+                  ) && (
+                    <option value={draft.productId} disabled>
+                      {task?.productName ?? task?.category} (unavailable)
+                    </option>
+                  )}
+              </select>
+              {errors.productId && (
+                <span id="product-error" className="field-error">
+                  {errors.productId}
+                </span>
+              )}
+            </label>
+            {(['productionQuantity', 'size', 'flavor'] as const).map(
+              (field) => (
+                <label
+                  className={`form-field ${errors[field as keyof FieldErrors] ? 'has-error' : ''}`}
+                  key={field}
+                >
+                  <span className="task-field-label">
+                    {field === 'productionQuantity' ? (
+                      <Hash size={15} aria-hidden="true" />
+                    ) : field === 'size' ? (
+                      <Ruler size={15} aria-hidden="true" />
+                    ) : (
+                      <CakeSlice size={15} aria-hidden="true" />
+                    )}
+                    {field === 'productionQuantity'
+                      ? 'Quantity'
+                      : field === 'size'
+                        ? 'Size / Dimensions (optional)'
+                        : 'Flavor / Filling (optional)'}
                   </span>
+                  <input
+                    type={field === 'productionQuantity' ? 'number' : 'text'}
+                    min={field === 'productionQuantity' ? 1 : undefined}
+                    step={field === 'productionQuantity' ? 1 : undefined}
+                    maxLength={150}
+                    value={draft[field]}
+                    aria-invalid={!!errors[field as keyof FieldErrors]}
+                    onChange={(e) => update(field, e.target.value)}
+                  />
+                  {errors[field as keyof FieldErrors] && (
+                    <span className="field-error">
+                      {errors[field as keyof FieldErrors]}
+                    </span>
+                  )}
+                </label>
+              ),
+            )}
+            {draft.taskType === 'customer_related' && (
+              <>
+                <label
+                  className={`form-field ${errors.customer ? 'has-error' : ''}`}
+                >
+                  <span className="task-field-label">
+                    <UserRound size={15} aria-hidden="true" />
+                    Customer name (optional)
+                  </span>
+                  <input
+                    className={errors.customer ? 'field-invalid' : undefined}
+                    aria-invalid={Boolean(errors.customer)}
+                    aria-describedby={
+                      errors.customer ? 'customer-error' : undefined
+                    }
+                    maxLength={100}
+                    value={draft.customer}
+                    onChange={(event) => update('customer', event.target.value)}
+                    placeholder="Customer or counter"
+                  />
+                  {errors.customer && (
+                    <span id="customer-error" className="field-error">
+                      {errors.customer}
+                    </span>
+                  )}
+                </label>
+                <label className="form-field">
+                  <span className="task-field-label">
+                    <Hash size={15} aria-hidden="true" />
+                    Linked Order ID (optional)
+                  </span>
+                  <input
+                    maxLength={50}
+                    value={draft.orderId}
+                    onChange={(event) => update('orderId', event.target.value)}
+                    placeholder="External order reference"
+                  />
+                </label>
+              </>
+            )}
+          </section>
+          <section
+            className="task-form-group"
+            aria-labelledby="task-scheduling-heading"
+          >
+            <h3
+              id="task-scheduling-heading"
+              className="task-form-group-heading"
+            >
+              <CalendarClock size={17} aria-hidden="true" />
+              Scheduling &amp; Assignment
+            </h3>
+            <label className="form-field">
+              <span className="task-field-label">
+                <CalendarClock size={15} aria-hidden="true" />
+                Production Due
+              </span>
+              <input
+                required
+                type="datetime-local"
+                className={errors.deadline ? 'field-invalid' : undefined}
+                aria-invalid={Boolean(errors.deadline)}
+                aria-describedby={
+                  errors.deadline ? 'deadline-error' : undefined
+                }
+                value={draft.deadline}
+                onChange={(event) => update('deadline', event.target.value)}
+              />
+              {errors.deadline && (
+                <span id="deadline-error" className="field-error">
+                  {errors.deadline}
+                </span>
+              )}
+            </label>
+            {draft.taskType === 'customer_related' && (
+              <label
+                className={`form-field ${errors.pickupAt ? 'has-error' : ''}`}
+              >
+                <span className="task-field-label">
+                  <Truck size={15} aria-hidden="true" />
+                  Pickup / Delivery Date &amp; Time (optional)
+                </span>
+                <input
+                  type="datetime-local"
+                  value={draft.pickupAt}
+                  aria-invalid={!!errors.pickupAt}
+                  onChange={(e) => update('pickupAt', e.target.value)}
+                />
+                {errors.pickupAt && (
+                  <span className="field-error">{errors.pickupAt}</span>
                 )}
               </label>
-              <label className="form-field">
-                Linked Order ID (optional){' '}
-                <input
-                  maxLength={50}
-                  value={draft.orderId}
-                  onChange={(event) => update('orderId', event.target.value)}
-                  placeholder="External order reference"
-                />
-              </label>
-            </>
-          )}
-          <label className="form-field form-field-full">
-            Allergy Notes / Special Handling (optional)
-            <textarea
-              rows={2}
-              maxLength={2000}
-              value={draft.allergyNotes}
-              onChange={(e) => update('allergyNotes', e.target.value)}
-              placeholder="Allergens, ingredient restrictions, cross-contact precautions, or special handling instructions..."
-            />
-          </label>
-          <fieldset
-            className={`checklist-editor form-field-full ${errors.checklist ? 'has-error' : ''}`}
+            )}
+            <fieldset
+              className={`staff-assignment form-field-full ${errors.assigneeIds ? 'has-error' : ''}`}
+              aria-describedby={
+                errors.assigneeIds ? 'assignee-error' : undefined
+              }
+            >
+              <legend>
+                <span className="task-field-label">
+                  <UsersRound size={15} aria-hidden="true" />
+                  Assign to staff
+                </span>
+              </legend>
+              <div className="staff-assignment-options">
+                {employees
+                  .filter(
+                    (employee) =>
+                      employee.active !== false ||
+                      task?.assigneeIds.includes(employee.id),
+                  )
+                  .map((employee) => (
+                    <label key={employee.id}>
+                      <input
+                        type="checkbox"
+                        disabled={employee.active === false}
+                        checked={draft.assigneeIds.includes(employee.id)}
+                        onChange={(event) => {
+                          const assigneeIds = event.target.checked
+                            ? [...draft.assigneeIds, employee.id]
+                            : draft.assigneeIds.filter(
+                                (id) => id !== employee.id,
+                              );
+                          update('assigneeIds', assigneeIds);
+                        }}
+                      />
+                      {employee.name}
+                      {employee.active === false
+                        ? ' (Inactive · existing assignment)'
+                        : ''}
+                    </label>
+                  ))}
+              </div>
+              {!employees.some((employee) => employee.active !== false) && (
+                <p className="field-error">
+                  No active staff members. Reactivate or add a staff member
+                  before assigning new work.
+                </p>
+              )}
+              {errors.assigneeIds && (
+                <span id="assignee-error" className="field-error">
+                  {errors.assigneeIds}
+                </span>
+              )}
+            </fieldset>
+            <label className="form-field">
+              <span className="task-field-label">
+                <Flag size={15} aria-hidden="true" />
+                Priority
+              </span>
+              <select
+                value={draft.priority}
+                onChange={(event) =>
+                  update('priority', event.target.value as Draft['priority'])
+                }
+              >
+                <option>Low</option>
+                <option>Normal</option>
+                <option>High</option>
+              </select>
+            </label>
+            <label className="form-field">
+              <span className="task-field-label">
+                <Columns3 size={15} aria-hidden="true" />
+                Status
+              </span>
+              <select
+                value={draft.status}
+                onChange={(event) =>
+                  update('status', event.target.value as Status)
+                }
+              >
+                {statuses.map((status) => (
+                  <option key={status.value} value={status.value}>
+                    {status.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </section>
+          <section
+            className="task-form-group"
+            aria-labelledby="task-instructions-heading"
           >
-            <legend>Production checklist (optional)</legend>
-            <ChecklistTemplatePicker
-              task={task}
-              checklist={draft.checklist}
-              onApply={(steps) => update('checklist', steps)}
-            />
-            {draft.checklist.map((step, index) => (
-              <div className="checklist-edit-row" key={index}>
-                <input
-                  aria-label={'Checklist step ' + (index + 1)}
-                  maxLength={100}
-                  className={
-                    !step.label.trim() && errors.checklist
-                      ? 'field-invalid'
-                      : undefined
-                  }
-                  aria-invalid={Boolean(!step.label.trim() && errors.checklist)}
-                  value={step.label}
-                  onChange={(event) =>
-                    update(
-                      'checklist',
-                      draft.checklist.map((item, i) =>
-                        i === index
-                          ? { ...item, label: event.target.value }
-                          : item,
-                      ),
-                    )
-                  }
-                />
-                <label className="checklist-done">
+            <h3
+              id="task-instructions-heading"
+              className="task-form-group-heading"
+            >
+              <CookingPot size={17} aria-hidden="true" />
+              Production Instructions
+            </h3>
+            <label className="form-field form-field-full task-allergy-field">
+              <span className="task-field-label">
+                <TriangleAlert size={15} aria-hidden="true" />
+                Allergy Notes / Special Handling (optional)
+              </span>
+              <textarea
+                rows={2}
+                maxLength={2000}
+                value={draft.allergyNotes}
+                onChange={(e) => update('allergyNotes', e.target.value)}
+                placeholder="Allergens, ingredient restrictions, cross-contact precautions, or special handling instructions..."
+              />
+            </label>
+            <fieldset
+              className={`checklist-editor form-field-full ${errors.checklist ? 'has-error' : ''}`}
+            >
+              <legend>
+                <span className="task-field-label">
+                  <ListChecks size={15} aria-hidden="true" />
+                  Production checklist (optional)
+                </span>
+              </legend>
+              <ChecklistTemplatePicker
+                task={task}
+                checklist={draft.checklist}
+                onApply={(steps) => update('checklist', steps)}
+              />
+              {draft.checklist.map((step, index) => (
+                <div className="checklist-edit-row" key={index}>
                   <input
-                    type="checkbox"
-                    checked={step.done}
+                    aria-label={'Checklist step ' + (index + 1)}
+                    maxLength={100}
+                    className={
+                      !step.label.trim() && errors.checklist
+                        ? 'field-invalid'
+                        : undefined
+                    }
+                    aria-invalid={Boolean(
+                      !step.label.trim() && errors.checklist,
+                    )}
+                    value={step.label}
                     onChange={(event) =>
                       update(
                         'checklist',
                         draft.checklist.map((item, i) =>
                           i === index
-                            ? { ...item, done: event.target.checked }
+                            ? { ...item, label: event.target.value }
                             : item,
                         ),
                       )
                     }
                   />
-                  Done
-                </label>
-                <button
-                  className="icon-button checklist-remove"
-                  type="button"
-                  aria-label={'Remove checklist step ' + (index + 1)}
-                  onClick={() =>
-                    update(
-                      'checklist',
-                      draft.checklist.filter((_, i) => i !== index),
-                    )
-                  }
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>
-            ))}
-            {errors.checklist && (
-              <p className="field-error checklist-error">{errors.checklist}</p>
-            )}
-            <button
-              className="add-checklist-step"
-              type="button"
-              onClick={() =>
-                update('checklist', [
-                  ...draft.checklist,
-                  { label: '', done: false },
-                ])
-              }
-            >
-              <Plus size={15} /> Add a checklist step
-            </button>
-          </fieldset>
-          <label className="form-field form-field-full">
-            Internal notes (optional){' '}
-            <textarea
-              rows={3}
-              maxLength={1000}
-              value={draft.notes}
-              onChange={(event) => update('notes', event.target.value)}
-              placeholder="Finishing, storage, and handoff notes for the team"
-            />
-          </label>
+                  <label className="checklist-done">
+                    <input
+                      type="checkbox"
+                      checked={step.done}
+                      onChange={(event) =>
+                        update(
+                          'checklist',
+                          draft.checklist.map((item, i) =>
+                            i === index
+                              ? { ...item, done: event.target.checked }
+                              : item,
+                          ),
+                        )
+                      }
+                    />
+                    Done
+                  </label>
+                  <button
+                    className="icon-button checklist-remove"
+                    type="button"
+                    aria-label={'Remove checklist step ' + (index + 1)}
+                    onClick={() =>
+                      update(
+                        'checklist',
+                        draft.checklist.filter((_, i) => i !== index),
+                      )
+                    }
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              ))}
+              {errors.checklist && (
+                <p className="field-error checklist-error">
+                  {errors.checklist}
+                </p>
+              )}
+              <button
+                className="add-checklist-step"
+                type="button"
+                onClick={() =>
+                  update('checklist', [
+                    ...draft.checklist,
+                    { label: '', done: false },
+                  ])
+                }
+              >
+                <Plus size={15} /> Add a checklist step
+              </button>
+            </fieldset>
+            <label className="form-field form-field-full">
+              <span className="task-field-label">
+                <StickyNote size={15} aria-hidden="true" />
+                Internal notes (optional)
+              </span>
+              <textarea
+                rows={3}
+                maxLength={1000}
+                value={draft.notes}
+                onChange={(event) => update('notes', event.target.value)}
+                placeholder="Finishing, storage, and handoff notes for the team"
+              />
+            </label>
+          </section>
           <footer className="task-form-footer">
             <button
               className="button button-outline"

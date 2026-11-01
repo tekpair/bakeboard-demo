@@ -9,7 +9,24 @@ import { useProductionLibraryData } from './demo-session';
 import { categoryName, taskProductName } from '@/lib/production-library';
 
 import { useEffect, useRef } from 'react';
-import { Check, Clock3, Pencil, Trash2, TriangleAlert, X } from 'lucide-react';
+import {
+  CakeSlice,
+  Check,
+  ChefHat,
+  ClipboardList,
+  Clock3,
+  Columns3,
+  Flag,
+  Hash,
+  Package,
+  Pencil,
+  Ruler,
+  Trash2,
+  TriangleAlert,
+  Truck,
+  UserRound,
+  X,
+} from 'lucide-react';
 import type { Employee, ProductionTask, Status } from '@/lib/types';
 import { ChecklistTemplatePicker } from './checklist-template-picker';
 import { Avatar } from './ui';
@@ -119,13 +136,21 @@ export function TaskDetails({
           className="task-detail-summary"
           aria-label="Production summary"
         >
-          <span className="task-detail-type">
+          <span className="task-detail-type task-meta-label">
+            {customerRelated(task) ? (
+              <ClipboardList size={13} aria-hidden="true" />
+            ) : (
+              <ChefHat size={13} aria-hidden="true" />
+            )}
             {taskType(task) === 'general_production'
               ? 'General Production'
               : 'Customer Production'}
           </span>
           {productionSummary(task) && (
-            <p className="detail-quantity">{productionSummary(task)}</p>
+            <p className="detail-quantity task-meta-label">
+              <Hash size={14} aria-hidden="true" />
+              {productionSummary(task)}
+            </p>
           )}
           {task.description && (
             <p className="task-description">{task.description}</p>
@@ -148,12 +173,18 @@ export function TaskDetails({
         )}
         <dl className="detail-facts">
           <div>
-            <dt>Category</dt>
+            <dt className="task-meta-label">
+              <Package size={13} aria-hidden="true" />
+              Category
+            </dt>
             <dd>{categoryName(task, categories)}</dd>
           </div>
           {customerRelated(task) && task.customer && (
             <div>
-              <dt>Customer</dt>
+              <dt className="task-meta-label">
+                <UserRound size={13} aria-hidden="true" />
+                Customer
+              </dt>
               <dd>{task.customer}</dd>
             </div>
           )}
@@ -173,7 +204,10 @@ export function TaskDetails({
           </div>
           {customerRelated(task) && pickupDate(task) && (
             <div>
-              <dt>Pickup / Delivery</dt>
+              <dt className="task-meta-label">
+                <Truck size={13} aria-hidden="true" />
+                Pickup / Delivery
+              </dt>
               <dd>
                 {new Intl.DateTimeFormat(undefined, {
                   timeZone: preferences.timeZone,
@@ -186,18 +220,27 @@ export function TaskDetails({
           )}
           {task.size && (
             <div>
-              <dt>Size / Dimensions</dt>
+              <dt className="task-meta-label">
+                <Ruler size={13} aria-hidden="true" />
+                Size / Dimensions
+              </dt>
               <dd>{task.size}</dd>
             </div>
           )}
           {task.flavor && (
             <div>
-              <dt>Flavor / Filling</dt>
+              <dt className="task-meta-label">
+                <CakeSlice size={13} aria-hidden="true" />
+                Flavor / Filling
+              </dt>
               <dd>{task.flavor}</dd>
             </div>
           )}
           <div>
-            <dt>Priority</dt>
+            <dt className="task-meta-label">
+              <Flag size={13} aria-hidden="true" />
+              Priority
+            </dt>
             <dd
               className={task.priority === 'High' ? 'priority-detail-high' : ''}
             >
@@ -205,7 +248,10 @@ export function TaskDetails({
             </dd>
           </div>
           <div>
-            <dt>Board status</dt>
+            <dt className="task-meta-label">
+              <Columns3 size={13} aria-hidden="true" />
+              Board status
+            </dt>
             <dd>
               {
                 statusOptions.find((option) => option.value === task.status)

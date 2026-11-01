@@ -10,6 +10,11 @@ import { useProductionLibraryData } from './demo-session';
 import { taskProductName } from '@/lib/production-library';
 import {
   AlertCircle,
+  ChefHat,
+  ClipboardList,
+  Hash,
+  Package,
+  UserRound,
   CheckCheck,
   Clock3,
   Flag,
@@ -110,14 +115,25 @@ export function TaskCard({
             </span>
           </div>
           <div className="task-timeline-meta">
-            <span className="category">{taskProductName(task, products)}</span>
-            {productionSummary(task) && <span>{productionSummary(task)}</span>}
+            <span className="category task-meta-label">
+              <Package size={13} aria-hidden="true" />
+              {taskProductName(task, products)}
+            </span>
+            {productionSummary(task) && (
+              <span className="task-meta-label">
+                <Hash size={13} aria-hidden="true" />
+                {productionSummary(task)}
+              </span>
+            )}
           </div>
           {task.description && (
             <p className="task-timeline-description">{task.description}</p>
           )}
           {customerRelated(task) && task.customer && (
-            <p className="task-customer">{task.customer}</p>
+            <p className="task-customer task-meta-label">
+              <UserRound size={13} aria-hidden="true" />
+              {task.customer}
+            </p>
           )}
         </>
       ) : (
@@ -136,7 +152,10 @@ export function TaskCard({
                 <GripVertical size={15} />
               </button>
             )}
-            <span className="category">{taskProductName(task, products)}</span>
+            <span className="category task-meta-label">
+              <Package size={13} aria-hidden="true" />
+              {taskProductName(task, products)}
+            </span>
             {personal && (
               <span className={`status-badge badge-${task.status}`}>
                 {statusLabels[task.status]}
@@ -145,13 +164,19 @@ export function TaskCard({
           </div>
           {heading}
           {productionSummary(task) && (
-            <p className="task-quantity">{productionSummary(task)}</p>
+            <p className="task-quantity task-meta-label">
+              <Hash size={13} aria-hidden="true" />
+              {productionSummary(task)}
+            </p>
           )}
           {personal && task.description && (
             <p className="task-description-preview">{task.description}</p>
           )}
           {customerRelated(task) && task.customer && (
-            <p className="task-customer">{task.customer}</p>
+            <p className="task-customer task-meta-label">
+              <UserRound size={13} aria-hidden="true" />
+              {task.customer}
+            </p>
           )}
           <div
             className={`task-deadline ${task.priority === 'High' && task.status !== 'completed' ? 'time-urgent' : ''}`}
@@ -177,7 +202,12 @@ export function TaskCard({
           </div>
         </>
       )}
-      <div className="task-production-label">
+      <div className="task-production-label task-meta-label">
+        {customerRelated(task) ? (
+          <ClipboardList size={12} aria-hidden="true" />
+        ) : (
+          <ChefHat size={12} aria-hidden="true" />
+        )}
         {timeline
           ? calendarMilestoneLabel(task)
           : customerRelated(task)
