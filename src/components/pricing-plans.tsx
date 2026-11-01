@@ -19,7 +19,7 @@ export function PricingPlans({ compact = false }: { compact?: boolean }) {
           className={yearly ? 'selected' : ''}
           onClick={() => setYearly(true)}
         >
-          Yearly <span>Save about 18%</span>
+          Yearly <span>Save 18%</span>
         </button>
       </div>
       <div className="pricing-grid">
@@ -44,7 +44,7 @@ export function PricingPlans({ compact = false }: { compact?: boolean }) {
             trial: '',
             features: [
               'Everything in Starter',
-              '1 bakery workspace & up to 15 staff members',
+              'Up to 15 staff members',
               '2 Production Boards',
               'Reusable production checklist templates',
               'Workspace themes & email reminders',
