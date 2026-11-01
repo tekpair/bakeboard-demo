@@ -40,6 +40,7 @@ export const calendarStatuses: Record<Status, string> = {
   completed: 'Completed',
 };
 export const weekPreviewLimit = 3;
+export const monthPreviewLimit = 2;
 export const emptyCalendarFilters: CalendarFilters = {
   product: '',
   status: '',

@@ -9,7 +9,7 @@ import { useProductionLibraryData } from './demo-session';
 import { categoryName, taskProductName } from '@/lib/production-library';
 
 import { useEffect, useRef } from 'react';
-import { Check, Clock3, Pencil, Trash2, X } from 'lucide-react';
+import { Check, Clock3, Pencil, Trash2, TriangleAlert, X } from 'lucide-react';
 import type { Employee, ProductionTask, Status } from '@/lib/types';
 import { ChecklistTemplatePicker } from './checklist-template-picker';
 import { Avatar } from './ui';
@@ -115,19 +115,22 @@ export function TaskDetails({
             <X size={20} />
           </button>
         </header>
-        {productionSummary(task) && (
-          <p className="detail-quantity">{productionSummary(task)}</p>
-        )}
-        {task.quantity && task.productionQuantity !== undefined && (
-          <p className="detail-note">
-            Original production details: {task.quantity}
-          </p>
-        )}
-        <p className="detail-note">
-          {taskType(task) === 'general_production'
-            ? 'General Production'
-            : 'Customer Production'}
-        </p>
+        <section
+          className="task-detail-summary"
+          aria-label="Production summary"
+        >
+          <span className="task-detail-type">
+            {taskType(task) === 'general_production'
+              ? 'General Production'
+              : 'Customer Production'}
+          </span>
+          {productionSummary(task) && (
+            <p className="detail-quantity">{productionSummary(task)}</p>
+          )}
+          {task.description && (
+            <p className="task-description">{task.description}</p>
+          )}
+        </section>
         {task.legacyPickupSchedule && (
           <p className="detail-note">
             Legacy due / pickup date retained. Review the separate production
@@ -136,12 +139,12 @@ export function TaskDetails({
         )}
         {task.allergyNotes?.trim() && (
           <section className="detail-section task-handling-warning">
-            <h3>Allergy Notes / Special Handling</h3>
+            <h3>
+              <TriangleAlert size={16} aria-hidden="true" />
+              Allergy Notes / Special Handling
+            </h3>
             <p style={{ whiteSpace: 'pre-wrap' }}>{task.allergyNotes}</p>
           </section>
-        )}
-        {task.description && (
-          <p className="task-description">{task.description}</p>
         )}
         <dl className="detail-facts">
           <div>
@@ -211,6 +214,12 @@ export function TaskDetails({
             </dd>
           </div>
         </dl>
+        {task.quantity && task.productionQuantity !== undefined && (
+          <details className="detail-original">
+            <summary>Original production details</summary>
+            <p>{task.quantity}</p>
+          </details>
+        )}
         {canUpdate && (
           <ChecklistTemplatePicker
             task={task}

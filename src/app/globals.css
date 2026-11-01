@@ -4478,7 +4478,7 @@ select option:checked {
   text-decoration: none;
 }
 .calendar-cell {
-  height: 140px;
+  height: 164px;
   background: var(--paper);
   vertical-align: top;
   border-top: 1px solid var(--line);
@@ -4488,7 +4488,7 @@ select option:checked {
   border-right: 0;
 }
 .calendar-cell-content {
-  height: 140px;
+  height: 164px;
   overflow: hidden;
   padding: 5px;
 }
@@ -7728,4 +7728,121 @@ body {
 }
 .calendar-milestone {
   flex-basis: 100%;
+}
+
+/* Keep month previews inside their fixed cells, including the more action. */
+.calendar-month-entries .calendar-entry {
+  height: 42px;
+  min-height: 42px;
+  padding: 4px 5px;
+}
+.calendar-month-entries .calendar-entry-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 4px;
+}
+.calendar-month-entries .calendar-entry-main strong {
+  grid-column: 1 / -1;
+  line-height: 13px;
+}
+.calendar-month-entries .calendar-milestone {
+  margin: 0;
+  font-size: 9px;
+  line-height: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.calendar-month-entries .calendar-entry-main time {
+  line-height: 12px;
+}
+.calendar-month-entries .calendar-more {
+  min-height: 24px;
+  margin: 0;
+}
+.task-detail-summary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin-top: 18px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--workspace-control, var(--ivory));
+}
+.task-detail-type {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--green);
+  padding: 4px 7px;
+  border-radius: 5px;
+  background: var(--workspace-nav, var(--sage));
+}
+.task-detail-summary .detail-quantity {
+  margin: 0;
+  color: var(--ink);
+  font-size: 14px;
+}
+.task-detail-summary .task-description {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.task-detail-content .detail-facts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 24px;
+  margin-top: 18px;
+  padding-block: 18px;
+}
+.task-detail-content .detail-facts > div {
+  min-width: 0;
+  grid-column: auto;
+}
+.task-detail-content .detail-facts dd {
+  margin: 0;
+  line-height: 1.6;
+  align-items: flex-start;
+  overflow-wrap: anywhere;
+}
+.task-detail-content .detail-facts dd svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.task-detail-content .task-handling-warning {
+  margin-top: 16px;
+  padding: 12px 14px;
+}
+.task-detail-content .task-handling-warning h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 13px;
+}
+.task-detail-content .task-handling-warning p {
+  margin: 3px 0 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.detail-original {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 12px;
+}
+.detail-original summary {
+  cursor: pointer;
+  padding-block: 6px;
+}
+.detail-original p {
+  margin-top: 6px;
+  line-height: 1.6;
+}
+@media (max-width: 400px) {
+  .task-detail-content .detail-facts {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
 }

@@ -12,58 +12,10 @@ export function legacyProductId(category: string) {
 export function defaultProductionLibrary(
   workspaceId: string,
 ): ProductionLibrary {
-  return {
-    categories: productCategories.map((name) => ({
-      id: legacyCategoryId(name),
-      workspaceId,
-      name,
-      description: '',
-      active: true,
-    })),
-    products: productCategories.map((category) => ({
-      id: legacyProductId(category),
-      workspaceId,
-      name: category,
-      category,
-      description: '',
-      active: true,
-    })),
-    templates: [
-      {
-        id: 'template-custom-cake',
-        workspaceId,
-        name: 'Custom Cake Production',
-        description: 'A reusable cake workflow.',
-        category: 'Cakes',
-        steps: [
-          'Bake cake layers.',
-          'Prepare filling.',
-          'Fill and crumb coat.',
-          'Final decoration.',
-          'Box and label.',
-          'Final inspection.',
-        ],
-        active: true,
-      },
-      {
-        id: 'template-sugar-cookies',
-        workspaceId,
-        name: 'Decorated Sugar Cookies',
-        description: 'From dough to packaged cookies.',
-        category: 'Cookies',
-        steps: [
-          'Prepare dough.',
-          'Cut and bake cookies.',
-          'Prepare royal icing.',
-          'Decorate cookies.',
-          'Allow icing to dry.',
-          'Package and label.',
-        ],
-        active: true,
-      },
-    ],
-  };
+  void workspaceId;
+  return { categories: [], products: [], templates: [] };
 }
+
 export function taskProductName(task: ProductionTask, products: Product[]) {
   return (
     products.find(

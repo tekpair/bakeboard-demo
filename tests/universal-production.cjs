@@ -39,7 +39,9 @@ const {
   parseProductionDateTime,
   productionDateTimeInput,
 } = require('../src/lib/production-dates.ts');
-const samples = createSampleTasks(Date.parse('2026-11-01T17:00:00Z'));
+const { createFixtureTasks } = require('./fixtures/production-tasks.ts');
+const samples = createFixtureTasks(Date.parse('2026-11-01T17:00:00Z'));
+assert.deepEqual(createSampleTasks(), []);
 assert(samples.some((t) => t.taskType === 'general_production'));
 assert(samples.some((t) => t.taskType === 'customer_related'));
 const due = '2026-11-12T20:00:00.000Z';
@@ -136,7 +138,13 @@ assert.equal(restored[2].pickupAt, pickup);
 storage.writeStoredTasks(restored.filter((t) => t.id !== 'QA-GENERAL'));
 assert.equal(storage.readStoredTasks().length, 2);
 assert(storage.resetDemoWorkspace());
-assert.equal(storage.readStoredTasks().length, samples.length);
+assert.deepEqual(storage.readStoredTasks(), []);
+assert.equal(storage.readStoredEmployees().length, 2);
+assert.deepEqual(storage.readStoredProductionLibrary(), {
+  categories: [],
+  products: [],
+  templates: [],
+});
 console.log(
   'Universal production: migration, persistence, scheduling, milestones, urgency, hidden data, deletion and reset passed.',
 );

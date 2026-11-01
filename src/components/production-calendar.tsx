@@ -26,6 +26,7 @@ import {
   moveCalendarPeriod,
   readCalendarState,
   weekPreviewLimit,
+  monthPreviewLimit,
   type CalendarFilters,
   type CalendarState,
   type CalendarView,
@@ -547,7 +548,7 @@ export function MonthSchedule({
                         )}
                       </div>
                       <div className="calendar-month-entries">
-                        {tasks.slice(0, 3).map((task) => (
+                        {tasks.slice(0, monthPreviewLimit).map((task) => (
                           <CalendarEntry
                             key={`${task.id}-${task.calendarMilestone}`}
                             task={task}
@@ -556,14 +557,14 @@ export function MonthSchedule({
                             onClick={() => onOpenTask(task)}
                           />
                         ))}
-                        {tasks.length > 3 && (
+                        {tasks.length > monthPreviewLimit && (
                           <button
                             type="button"
                             className="calendar-more"
                             aria-label={`Show all ${tasks.length} tasks for ${label}`}
                             onClick={() => onOpenDay(key)}
                           >
-                            +{tasks.length - 3} more
+                            +{tasks.length - monthPreviewLimit} more
                           </button>
                         )}
                       </div>
