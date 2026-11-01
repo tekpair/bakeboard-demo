@@ -418,7 +418,7 @@ export function OverviewDashboard({
             <div>
               <label htmlFor="daily-progress">
                 <CheckCheck size={15} aria-hidden="true" />
-                Production checklist progress
+                Production Checklist progress
               </label>
               <span className="progress-summary">
                 <strong>{stepsPercent}%</strong>

@@ -292,7 +292,7 @@ export function TaskDetails({
         </fieldset>
         <section className="detail-section">
           <h3 ref={checklistHeadingRef} tabIndex={-1}>
-            Production checklist{' '}
+            Production Checklist{' '}
             <span>
               {task.checklist.filter((item) => item.done).length}/
               {task.checklist.length}
@@ -347,7 +347,7 @@ export function TaskDetails({
           )}
         {task.notes && (
           <section className="detail-section">
-            <h3>Internal notes</h3>
+            <h3>Internal Notes</h3>
             <p className="detail-internal-notes">{task.notes}</p>
           </section>
         )}

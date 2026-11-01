@@ -12,6 +12,10 @@ import {
   CakeSlice,
   FolderOpen,
   Sparkles,
+  ClipboardList,
+  FileText,
+  ListChecks,
+  ToggleRight,
 } from 'lucide-react';
 import { useDemoSession } from './demo-session';
 import { useDemoTasks } from '@/lib/use-demo-tasks';
@@ -598,15 +602,29 @@ function LibraryEditor({
         noValidate
       >
         <div className="library-form-fields">
+          {message && (
+            <p className="form-error form-field-full" role="alert">
+              {message}
+            </p>
+          )}
           <label
             className={`form-field form-field-full ${errors.name ? 'has-error' : ''}`}
           >
-            {kind === 'products'
-              ? 'Product Name'
-              : kind === 'categories'
-                ? 'Category Name'
-                : 'Template Name'}{' '}
-            *
+            <span className="task-field-label">
+              {kind === 'products' ? (
+                <CakeSlice size={15} aria-hidden="true" />
+              ) : kind === 'categories' ? (
+                <FolderOpen size={15} aria-hidden="true" />
+              ) : (
+                <ClipboardList size={15} aria-hidden="true" />
+              )}
+              {kind === 'products'
+                ? 'Product Name'
+                : kind === 'categories'
+                  ? 'Category Name'
+                  : 'Template Name'}{' '}
+              *
+            </span>
             <input
               required
               value={name}
@@ -627,9 +645,10 @@ function LibraryEditor({
           </label>
           {kind !== 'categories' && (
             <label className="form-field form-field-full">
-              {kind === 'products'
-                ? 'Product Category *'
-                : 'Product Category (optional)'}
+              <span className="task-field-label">
+                <FolderOpen size={15} aria-hidden="true" />
+                Product Category{kind === 'products' ? ' *' : ''}
+              </span>
               <select
                 value={category}
                 aria-invalid={!!errors.category}
@@ -666,7 +685,10 @@ function LibraryEditor({
             </label>
           )}
           <label className="form-field form-field-full">
-            Description (optional)
+            <span className="task-field-label">
+              <FileText size={15} aria-hidden="true" />
+              Description
+            </span>
             <textarea
               value={description}
               rows={3}
@@ -680,7 +702,10 @@ function LibraryEditor({
             )}
           </label>
           <label className="form-field form-field-full">
-            Status
+            <span className="task-field-label">
+              <ToggleRight size={15} aria-hidden="true" />
+              Status
+            </span>
             <select
               value={active ? 'active' : 'inactive'}
               onChange={(event) => setActive(event.target.value === 'active')}
@@ -693,7 +718,12 @@ function LibraryEditor({
             <fieldset
               className={`library-step-editor form-field-full ${errors.steps ? 'has-error' : ''}`}
             >
-              <legend>Checklist steps</legend>
+              <legend>
+                <span className="task-field-label">
+                  <ListChecks size={15} aria-hidden="true" />
+                  Checklist Steps
+                </span>
+              </legend>
               {steps.map((step, index) => (
                 <div className="library-step-row" key={step.id}>
                   <span>{index + 1}</span>
@@ -776,11 +806,6 @@ function LibraryEditor({
             <p className="settings-note form-field-full">
               Inactive categories stay on existing work and aren’t offered for
               new products or tasks.
-            </p>
-          )}
-          {message && (
-            <p className="field-error form-field-full" role="alert">
-              {message}
             </p>
           )}
         </div>

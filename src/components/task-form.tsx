@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { Avatar } from './ui';
 import { ChecklistTemplatePicker } from './checklist-template-picker';
 import {
   recordCategory,
@@ -389,7 +390,7 @@ export function TaskForm({
             >
               <span className="task-field-label">
                 <ClipboardList size={15} aria-hidden="true" />
-                Task name
+                Task Name
               </span>
               <input
                 required
@@ -548,7 +549,7 @@ export function TaskForm({
                 >
                   <span className="task-field-label">
                     <UserRound size={15} aria-hidden="true" />
-                    Customer name
+                    Customer Name
                   </span>
                   <input
                     className={errors.customer ? 'field-invalid' : undefined}
@@ -643,7 +644,7 @@ export function TaskForm({
               <legend>
                 <span className="task-field-label">
                   <UsersRound size={15} aria-hidden="true" />
-                  Assign to staff
+                  Assign to Staff
                 </span>
               </legend>
               <div className="staff-assignment-options">
@@ -668,10 +669,15 @@ export function TaskForm({
                           update('assigneeIds', assigneeIds);
                         }}
                       />
-                      {employee.name}
-                      {employee.active === false
-                        ? ' (Inactive · existing assignment)'
-                        : ''}
+                      <span aria-hidden="true">
+                        <Avatar employee={employee} small />
+                      </span>
+                      <span className="staff-choice-name">
+                        {employee.name}
+                        {employee.active === false && (
+                          <small>Inactive · existing assignment</small>
+                        )}
+                      </span>
                     </label>
                   ))}
               </div>
@@ -752,7 +758,7 @@ export function TaskForm({
               <legend>
                 <span className="task-field-label">
                   <ListChecks size={15} aria-hidden="true" />
-                  Production checklist
+                  Production Checklist
                 </span>
               </legend>
               <ChecklistTemplatePicker
@@ -838,7 +844,7 @@ export function TaskForm({
             <label className="form-field form-field-full">
               <span className="task-field-label">
                 <StickyNote size={15} aria-hidden="true" />
-                Internal notes
+                Internal Notes
               </span>
               <textarea
                 rows={3}

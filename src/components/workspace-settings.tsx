@@ -230,9 +230,7 @@ export function WorkspaceSettingsPage() {
               />
             </div>
             <div className="settings-address">
-              <h3>
-                Business address <span>(optional)</span>
-              </h3>
+              <h3>Business address</h3>
               <div className="settings-grid">
                 {(
                   [
