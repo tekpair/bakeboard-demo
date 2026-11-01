@@ -630,7 +630,7 @@ ol {
 }
 .footer {
   display: grid;
-  grid-template-columns: 1.1fr 1fr 1fr;
+  grid-template-columns: 1.6fr repeat(3, minmax(0, 1fr));
   gap: 32px;
   align-items: start;
   padding-top: 22px;
@@ -2982,8 +2982,8 @@ progress::-moz-progress-bar {
     font-size: 14px;
   }
   .footer {
-    grid-template-columns: 1fr 1fr;
-    gap: 22px 28px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px 14px;
     padding-top: 18px;
     padding-bottom: 24px;
   }

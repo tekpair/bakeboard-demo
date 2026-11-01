@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { ArrowUpRight } from 'lucide-react';
 import { Brand, DemoLink } from './ui';
 export function MarketingHeader() {
   return (
@@ -29,19 +28,21 @@ export function Footer() {
         <div className="footer-group">
           <h2>Explore</h2>
           <nav aria-label="Explore">
-            <Link href="/demo/overview">
-              Try Free Demo <ArrowUpRight size={13} />
-            </Link>
-            <Link href="/#how-it-works">How It Works</Link>
+            <Link href="/demo/overview">Try Free Demo</Link>
             <Link href="/about">About Us</Link>
-            <Link href="/help">Help Center</Link>
             <Link href="/pricing">Pricing</Link>
           </nav>
         </div>
         <div className="footer-group">
-          <h2>Support &amp; Legal</h2>
-          <nav aria-label="Support and legal">
+          <h2>Support</h2>
+          <nav aria-label="Support">
+            <Link href="/help">Help Center</Link>
             <Link href="mailto:hello@bakeboard.co">Contact</Link>
+          </nav>
+        </div>
+        <div className="footer-group">
+          <h2>Legal</h2>
+          <nav aria-label="Legal">
             <Link href="/privacy">Privacy Policy</Link>
             <Link href="/terms">Terms of Service</Link>
           </nav>
