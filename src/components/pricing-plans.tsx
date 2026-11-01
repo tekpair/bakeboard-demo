@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Check, ArrowUpRight } from 'lucide-react';
+import { Check, ArrowUpRight, Sparkles, Sprout } from 'lucide-react';
 import Link from 'next/link';
 export function PricingPlans({ compact = false }: { compact?: boolean }) {
   const [yearly, setYearly] = useState(false);
@@ -56,6 +56,18 @@ export function PricingPlans({ compact = false }: { compact?: boolean }) {
             key={p.name}
             id={i ? 'plus' : 'starter'}
           >
+            <span
+              className={`plan-ribbon ${i ? 'plan-ribbon-plus' : 'plan-ribbon-starter'}`}
+              role="img"
+              aria-label={`${p.name} plan badge`}
+              title={`BakeBoard ${p.name}`}
+            >
+              {i ? (
+                <Sparkles size={19} aria-hidden="true" />
+              ) : (
+                <Sprout size={19} aria-hidden="true" />
+              )}
+            </span>
             <div className="plan-heading">
               <h3>BakeBoard {p.name}</h3>
             </div>
