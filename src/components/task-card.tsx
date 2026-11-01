@@ -181,7 +181,7 @@ export function TaskCard({
         {timeline
           ? calendarMilestoneLabel(task)
           : customerRelated(task)
-            ? 'Customer-Related'
+            ? 'Customer Production'
             : 'General Production'}
       </div>
       {!timeline && pickupDate(task) && (

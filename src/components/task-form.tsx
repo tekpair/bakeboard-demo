@@ -307,11 +307,6 @@ export function TaskForm({
               {task ? 'EDIT TASK' : 'NEW PRODUCTION TASK'}
             </p>
             <h2 id="task-form-title">{task ? 'Edit task' : 'Create a Task'}</h2>
-            <p className="detail-note">
-              {draft.taskType === 'general_production'
-                ? 'Everyday prep, batches, and bakery production.'
-                : 'Production for a customer request received elsewhere.'}
-            </p>
           </div>
           <button
             className="icon-button modal-close"
@@ -339,7 +334,7 @@ export function TaskForm({
                 },
                 {
                   value: 'customer_related',
-                  label: 'Customer-Related',
+                  label: 'Customer Production',
                   Icon: ClipboardList,
                 },
               ] as const

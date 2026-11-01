@@ -238,7 +238,7 @@ export function Board({
                 >
                   <option value="">All Tasks</option>
                   <option value="general_production">General Production</option>
-                  <option value="customer_related">Customer-Related</option>
+                  <option value="customer_related">Customer Production</option>
                 </select>
                 <select
                   value={category}

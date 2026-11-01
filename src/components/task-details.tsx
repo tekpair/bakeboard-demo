@@ -126,7 +126,7 @@ export function TaskDetails({
         <p className="detail-note">
           {taskType(task) === 'general_production'
             ? 'General Production'
-            : 'Customer-Related'}
+            : 'Customer Production'}
         </p>
         {task.legacyPickupSchedule && (
           <p className="detail-note">
