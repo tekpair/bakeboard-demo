@@ -412,7 +412,7 @@ export function TaskForm({
             >
               <span className="task-field-label">
                 <FileText size={15} aria-hidden="true" />
-                Description (optional)
+                Description
               </span>
               <textarea
                 className={errors.description ? 'field-invalid' : undefined}
@@ -521,8 +521,8 @@ export function TaskForm({
                     {field === 'productionQuantity'
                       ? 'Quantity'
                       : field === 'size'
-                        ? 'Size / Dimensions (optional)'
-                        : 'Flavor / Filling (optional)'}
+                        ? 'Size / Dimensions'
+                        : 'Flavor / Filling'}
                   </span>
                   <input
                     type={field === 'productionQuantity' ? 'number' : 'text'}
@@ -548,7 +548,7 @@ export function TaskForm({
                 >
                   <span className="task-field-label">
                     <UserRound size={15} aria-hidden="true" />
-                    Customer name (optional)
+                    Customer name
                   </span>
                   <input
                     className={errors.customer ? 'field-invalid' : undefined}
@@ -570,7 +570,7 @@ export function TaskForm({
                 <label className="form-field">
                   <span className="task-field-label">
                     <Hash size={15} aria-hidden="true" />
-                    Linked Order ID (optional)
+                    Linked Order ID
                   </span>
                   <input
                     maxLength={50}
@@ -621,7 +621,7 @@ export function TaskForm({
               >
                 <span className="task-field-label">
                   <Truck size={15} aria-hidden="true" />
-                  Pickup / Delivery Date &amp; Time (optional)
+                  Pickup / Delivery Date &amp; Time
                 </span>
                 <input
                   type="datetime-local"
@@ -736,7 +736,7 @@ export function TaskForm({
             <label className="form-field form-field-full task-allergy-field">
               <span className="task-field-label">
                 <TriangleAlert size={15} aria-hidden="true" />
-                Allergy Notes / Special Handling (optional)
+                Allergy Notes / Special Handling
               </span>
               <textarea
                 rows={2}
@@ -752,7 +752,7 @@ export function TaskForm({
               <legend>
                 <span className="task-field-label">
                   <ListChecks size={15} aria-hidden="true" />
-                  Production checklist (optional)
+                  Production checklist
                 </span>
               </legend>
               <ChecklistTemplatePicker
@@ -838,7 +838,7 @@ export function TaskForm({
             <label className="form-field form-field-full">
               <span className="task-field-label">
                 <StickyNote size={15} aria-hidden="true" />
-                Internal notes (optional)
+                Internal notes
               </span>
               <textarea
                 rows={3}
