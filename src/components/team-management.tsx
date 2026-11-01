@@ -3,7 +3,19 @@ import { customerRelated } from '@/lib/task-production';
 
 import { SlidePanel } from './slide-panel';
 import { useState } from 'react';
-import { ArrowRight, Pencil, Plus, Search, Trash2, Users } from 'lucide-react';
+import {
+  ArrowRight,
+  Mail,
+  Pencil,
+  Plus,
+  Save,
+  Search,
+  ShieldCheck,
+  Trash2,
+  UserPlus,
+  UserRound,
+  Users,
+} from 'lucide-react';
 import type { Employee, ProductionTask, WorkspaceRole } from '@/lib/types';
 import {
   canManageEmployee,
@@ -593,94 +605,109 @@ function TeamMemberForm({
   return (
     <TeamPanel
       title={employee ? 'Edit staff member' : 'Add Staff Member'}
+      className="library-editor-panel staff-editor-panel"
       label="STAFF MANAGEMENT"
       onClose={onClose}
     >
       <form
-        className="team-member-form"
+        className="team-member-form library-form"
         noValidate
         onSubmit={submit}
         onChange={() => {
           setError('');
         }}
       >
-        <div className="task-form">
-          <label className="form-field">
-            First name
-            <input
-              autoComplete="given-name"
-              maxLength={60}
-              required
-              value={firstName}
-              aria-invalid={submitted && !firstName.trim()}
-              className={
-                submitted && !firstName.trim() ? 'field-invalid' : undefined
-              }
-              onChange={(event) => setFirstName(event.target.value)}
-            />
-          </label>
-          <label className="form-field">
-            Last name
-            <input
-              autoComplete="family-name"
-              maxLength={60}
-              required
-              value={lastName}
-              aria-invalid={submitted && !lastName.trim()}
-              className={
-                submitted && !lastName.trim() ? 'field-invalid' : undefined
-              }
-              onChange={(event) => setLastName(event.target.value)}
-            />
-          </label>
-          <label className="form-field form-field-full">
-            Email address
-            <input
-              type="email"
-              readOnly={!!employee}
-              placeholder={employee && !email ? 'Not provided' : undefined}
-              autoComplete="email"
-              maxLength={254}
-              required={!employee}
-              value={email}
-              aria-invalid={submitted && emailInvalid}
-              className={
-                submitted && emailInvalid ? 'field-invalid' : undefined
-              }
-              onChange={(event) => setEmail(event.target.value)}
-            />
-          </label>
-          <label className="form-field form-field-full">
-            Assigned role
-            <select
-              aria-label="Assigned role"
-              aria-describedby="team-role-help"
-              value={assignedRole}
-              disabled={!canEditEmployeeRole(role, employee)}
-              onChange={(event) =>
-                setAssignedRole(event.target.value as WorkspaceRole)
-              }
-            >
-              {roles.map((value) => (
-                <option key={value} value={value}>
-                  {demoRoles[value]}
-                </option>
-              ))}
-            </select>
-            <span id="team-role-help" className="team-field-help">
-              {roleDescriptions[assignedRole]}
-            </span>
-          </label>
-        </div>
-        <p className="demo-inline-note team-form-demo-note">
-          Demo preview · Staff changes stay in this browser.
-        </p>
-        {error && (
-          <p className="form-error" role="alert">
-            {error}
+        <div className="library-form-fields staff-form-fields">
+          <div className="task-form">
+            <label className="form-field">
+              <span className="task-field-label">
+                <UserRound size={15} aria-hidden="true" />
+                First name
+              </span>
+              <input
+                autoComplete="given-name"
+                maxLength={60}
+                required
+                value={firstName}
+                aria-invalid={submitted && !firstName.trim()}
+                className={
+                  submitted && !firstName.trim() ? 'field-invalid' : undefined
+                }
+                onChange={(event) => setFirstName(event.target.value)}
+              />
+            </label>
+            <label className="form-field">
+              <span className="task-field-label">
+                <UserRound size={15} aria-hidden="true" />
+                Last name
+              </span>
+              <input
+                autoComplete="family-name"
+                maxLength={60}
+                required
+                value={lastName}
+                aria-invalid={submitted && !lastName.trim()}
+                className={
+                  submitted && !lastName.trim() ? 'field-invalid' : undefined
+                }
+                onChange={(event) => setLastName(event.target.value)}
+              />
+            </label>
+            <label className="form-field form-field-full">
+              <span className="task-field-label">
+                <Mail size={15} aria-hidden="true" />
+                Email address
+              </span>
+              <input
+                type="email"
+                readOnly={!!employee}
+                placeholder={employee && !email ? 'Not provided' : undefined}
+                autoComplete="email"
+                maxLength={254}
+                required={!employee}
+                value={email}
+                aria-invalid={submitted && emailInvalid}
+                className={
+                  submitted && emailInvalid ? 'field-invalid' : undefined
+                }
+                onChange={(event) => setEmail(event.target.value)}
+              />
+            </label>
+            <label className="form-field form-field-full">
+              <span className="task-field-label">
+                <ShieldCheck size={15} aria-hidden="true" />
+                Assigned role
+              </span>
+              <select
+                aria-label="Assigned role"
+                aria-describedby="team-role-help"
+                value={assignedRole}
+                disabled={!canEditEmployeeRole(role, employee)}
+                onChange={(event) =>
+                  setAssignedRole(event.target.value as WorkspaceRole)
+                }
+              >
+                {roles.map((value) => (
+                  <option key={value} value={value}>
+                    {demoRoles[value]}
+                  </option>
+                ))}
+              </select>
+              <span id="team-role-help" className="team-field-help">
+                {roleDescriptions[assignedRole]}
+              </span>
+            </label>
+          </div>
+          <p className="demo-inline-note team-form-demo-note">
+            Demo preview · Staff changes stay in this browser.
           </p>
-        )}
-        <footer className="team-form-footer">
+          {error && (
+            <p className="form-error" role="alert">
+              {error}
+            </p>
+          )}
+        </div>
+        <footer className="task-form-footer team-form-footer">
           <button
             type="button"
             className="button button-outline"
@@ -689,6 +716,11 @@ function TeamMemberForm({
             Cancel
           </button>
           <button type="submit" className="button button-primary">
+            {employee ? (
+              <Save size={15} aria-hidden="true" />
+            ) : (
+              <UserPlus size={15} aria-hidden="true" />
+            )}
             {employee ? 'Save changes' : 'Add member'}
           </button>
         </footer>
