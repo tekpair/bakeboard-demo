@@ -1,3 +1,4 @@
+import { pickupDate } from './task-production';
 import {
   productCategories,
   type Category,
@@ -111,7 +112,23 @@ export function groupCalendarTasks(tasks: ProductionTask[], timeZone?: string) {
   const days = new Map<string, ProductionTask[]>();
   for (const task of tasks) {
     const key = productionDay(task.deadline, timeZone);
-    days.set(key, [...(days.get(key) ?? []), task]);
+    days.set(key, [
+      ...(days.get(key) ?? []),
+      { ...task, calendarMilestone: 'production' },
+    ]);
+    const pickup = pickupDate(task);
+    if (pickup && pickup !== task.deadline) {
+      const pickupKey = productionDay(pickup, timeZone);
+      days.set(pickupKey, [
+        ...(days.get(pickupKey) ?? []),
+        {
+          ...task,
+          productionDue: task.productionDue ?? task.deadline,
+          deadline: pickup,
+          calendarMilestone: 'pickup',
+        },
+      ]);
+    }
   }
   return days;
 }

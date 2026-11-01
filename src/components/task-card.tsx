@@ -1,4 +1,11 @@
 'use client';
+import {
+  calendarMilestoneLabel,
+  customerRelated,
+  pickupDate,
+  productionSummary,
+} from '@/lib/task-production';
+
 import { useProductionLibraryData } from './demo-session';
 import { taskProductName } from '@/lib/production-library';
 import {
@@ -104,12 +111,14 @@ export function TaskCard({
           </div>
           <div className="task-timeline-meta">
             <span className="category">{taskProductName(task, products)}</span>
-            {task.quantity && <span>{task.quantity}</span>}
+            {productionSummary(task) && <span>{productionSummary(task)}</span>}
           </div>
           {task.description && (
             <p className="task-timeline-description">{task.description}</p>
           )}
-          {task.customer && <p className="task-customer">{task.customer}</p>}
+          {customerRelated(task) && task.customer && (
+            <p className="task-customer">{task.customer}</p>
+          )}
         </>
       ) : (
         <>
@@ -135,15 +144,20 @@ export function TaskCard({
             )}
           </div>
           {heading}
-          {task.quantity && <p className="task-quantity">{task.quantity}</p>}
+          {productionSummary(task) && (
+            <p className="task-quantity">{productionSummary(task)}</p>
+          )}
           {personal && task.description && (
             <p className="task-description-preview">{task.description}</p>
           )}
-          <p className="task-customer">{task.customer}</p>
+          {customerRelated(task) && task.customer && (
+            <p className="task-customer">{task.customer}</p>
+          )}
           <div
             className={`task-deadline ${task.priority === 'High' && task.status !== 'completed' ? 'time-urgent' : ''}`}
           >
             <Clock3 size={14} aria-hidden="true" />
+            <span>Production due</span>
             <time dateTime={task.deadline}>
               {personal
                 ? new Intl.DateTimeFormat(undefined, {
@@ -162,6 +176,30 @@ export function TaskCard({
             </time>
           </div>
         </>
+      )}
+      <div className="task-production-label">
+        {timeline
+          ? calendarMilestoneLabel(task)
+          : customerRelated(task)
+            ? 'Customer-Related'
+            : 'General Production'}
+      </div>
+      {!timeline && pickupDate(task) && (
+        <p className="task-pickup-line">
+          Pickup / Delivery:{' '}
+          {new Intl.DateTimeFormat(undefined, {
+            timeZone: preferences.timeZone,
+            dateStyle: 'short',
+            timeStyle: 'short',
+            hourCycle: preferences.timeFormat === '24h' ? 'h23' : 'h12',
+          }).format(new Date(pickupDate(task)!))}
+        </p>
+      )}
+      {task.allergyNotes?.trim() && (
+        <div className="task-handling-warning">
+          <AlertCircle size={14} aria-hidden="true" />
+          Allergy / special handling — review notes
+        </div>
       )}
       {(overdue ||
         awaitingCollection ||

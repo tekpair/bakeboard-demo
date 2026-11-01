@@ -1,4 +1,5 @@
 'use client';
+import { calendarMilestoneLabel } from '@/lib/task-production';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -184,11 +185,9 @@ export function ProductionCalendar({
     (count, date) => count + (byDay.get(date)?.length ?? 0),
     0,
   );
-  const monthCount = filtered.filter(
-    (task) =>
-      productionDay(task.deadline, preferences.timeZone).slice(0, 7) ===
-      schedule.date.slice(0, 7),
-  ).length;
+  const monthCount = [...byDay.entries()]
+    .filter(([date]) => date.slice(0, 7) === schedule.date.slice(0, 7))
+    .reduce((total, [, entries]) => total + entries.length, 0);
 
   return (
     <main id="main" className="dashboard-main calendar-page">
@@ -550,7 +549,7 @@ export function MonthSchedule({
                       <div className="calendar-month-entries">
                         {tasks.slice(0, 3).map((task) => (
                           <CalendarEntry
-                            key={task.id}
+                            key={`${task.id}-${task.calendarMilestone}`}
                             task={task}
                             now={now}
                             warningMinutes={warningMinutes}
@@ -622,7 +621,7 @@ function CalendarEntry({
       (employee) => `${employee.name}${employee.removed ? ' (removed)' : ''}`,
     )
     .join(', ');
-  const label = `${task.title}${task.productId ? `, ${taskProductName(task, products)}` : ''}, ${productionTime(task.deadline, preferences.timeZone, preferences.timeFormat)}, ${calendarStatuses[task.status]}${overdue ? ', Overdue production' : awaiting ? ', Awaiting collection' : dueSoon ? ', Due soon' : ''}${task.priority === 'High' ? ', High priority' : ''}${assignedNames ? `, Assigned to ${assignedNames}` : ''}`;
+  const label = `${calendarMilestoneLabel(task)}, ${task.title}${task.productId ? `, ${taskProductName(task, products)}` : ''}, ${productionTime(task.deadline, preferences.timeZone, preferences.timeFormat)}, ${calendarStatuses[task.status]}${overdue ? ', Overdue production' : awaiting ? ', Awaiting collection' : dueSoon ? ', Due soon' : ''}${task.priority === 'High' ? ', High priority' : ''}${assignedNames ? `, Assigned to ${assignedNames}` : ''}`;
   return (
     <button
       type="button"
@@ -633,6 +632,9 @@ function CalendarEntry({
     >
       <span className="calendar-entry-main">
         <strong>{task.title}</strong>
+        <span className="calendar-milestone">
+          {calendarMilestoneLabel(task)}
+        </span>
         <time dateTime={task.deadline}>
           {productionTime(
             task.deadline,
@@ -726,7 +728,7 @@ export function WeekSchedule({
           <div className="calendar-week-tasks">
             {(byDay.get(date) ?? []).slice(0, weekPreviewLimit).map((task) => (
               <CalendarEntry
-                key={task.id}
+                key={`${task.id}-${task.calendarMilestone}`}
                 task={task}
                 now={now}
                 warningMinutes={warningMinutes}
@@ -812,7 +814,7 @@ export function DaySchedule({
           <div className="calendar-day-cards">
             {group.map((task) => (
               <TaskCard
-                key={task.id}
+                key={`${task.id}-${task.calendarMilestone}`}
                 task={task}
                 employees={employees}
                 now={now}

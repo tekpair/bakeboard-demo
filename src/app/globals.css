@@ -7666,3 +7666,66 @@ body {
     margin-left: 0;
   }
 }
+
+.task-type-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  border: 0;
+  padding: 0;
+  margin: 0 0 8px;
+}
+.task-type-selector legend {
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.task-type-selector label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 190px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.task-type-selector label.selected {
+  background: var(--workspace-control, var(--sage));
+  border-color: var(--green);
+}
+.task-type-selector input {
+  accent-color: var(--green);
+}
+.task-production-label,
+.task-pickup-line,
+.calendar-milestone {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.task-handling-warning {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 9px;
+  margin-top: 10px;
+  border: 1px solid #d7b777;
+  background: #fbf4e5;
+  border-radius: 6px;
+  color: #76551c;
+  font-size: 12px;
+}
+.task-handling-warning p {
+  flex-basis: 100%;
+}
+.task-handling-warning h3 {
+  font-size: 14px;
+}
+.calendar-entry-main {
+  flex-wrap: wrap;
+}
+.calendar-milestone {
+  flex-basis: 100%;
+}

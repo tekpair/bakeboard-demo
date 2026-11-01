@@ -246,7 +246,7 @@ export function MyTasks({
                   aria-labelledby="my-ready-title"
                 >
                   <div className="my-work-heading">
-                    <h2 id="my-ready-title">Ready / Awaiting Collection</h2>
+                    <h2 id="my-ready-title">Ready / Next Step</h2>
                   </div>
                   {readyForCollection.length ? (
                     cards(readyForCollection)

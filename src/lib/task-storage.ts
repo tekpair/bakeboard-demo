@@ -1,3 +1,4 @@
+import { normalizeProductionTask } from './task-production';
 import { hasPlanCapability, isWorkspacePlan } from './entitlements';
 import { appearanceForPreset } from './workspace-theme';
 import { reminderErrors } from './workspace-settings';
@@ -149,7 +150,7 @@ function cleanStoredTasks(tasks: ProductionTask[]) {
   const workspaceId = readStoredWorkspaceSettings().id;
   return purgeStaffReferences(tasks, new Set(readRemovedStaffIds())).map(
     (task) => {
-      const cleaned = { ...task };
+      const cleaned = { ...normalizeProductionTask(task) };
       Reflect.deleteProperty(cleaned, 'productionStage');
       return task.workspaceId === LEGACY_WORKSPACE_ID ||
         task.workspaceId === PREVIOUS_SAMPLE_WORKSPACE_ID ||
@@ -328,6 +329,21 @@ function isTaskList(value: unknown): value is ProductionTask[] {
       typeof task.id === 'string' &&
       task.id.length > 0 &&
       typeof task.workspaceId === 'string' &&
+      (task.taskType === undefined ||
+        task.taskType === 'general_production' ||
+        task.taskType === 'customer_related') &&
+      (task.productionQuantity === undefined ||
+        (Number.isSafeInteger(task.productionQuantity) &&
+          Number(task.productionQuantity) > 0)) &&
+      ['productionDue', 'pickupAt'].every(
+        (key) =>
+          task[key] === undefined ||
+          (typeof task[key] === 'string' &&
+            Number.isFinite(Date.parse(task[key] as string))),
+      ) &&
+      ['size', 'flavor', 'allergyNotes'].every(
+        (key) => task[key] === undefined || typeof task[key] === 'string',
+      ) &&
       typeof task.title === 'string' &&
       typeof task.customer === 'string' &&
       typeof task.category === 'string' &&

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { customerRelated, taskType } from '@/lib/task-production';
 import { matchesTaskCategory } from '@/lib/production-library';
 import { ChevronDown, Plus, RotateCcw, Search } from 'lucide-react';
 import type { Employee, ProductionTask, Status } from '@/lib/types';
@@ -60,6 +61,7 @@ export function Board({
     !!session && canUpdateTask(session.role, session.employee.id, task);
   const tasks = preview ? initialTasks : demo.tasks;
   const [query, setQuery] = useState('');
+  const [typeFilter, setTypeFilter] = useState('');
   const [category, setCategory] = useState('');
   const [assignee, setAssignee] = useState('Anyone');
   const [priority, setPriority] = useState('Any priority');
@@ -96,11 +98,12 @@ export function Board({
     () =>
       tasks.filter((task) => {
         const matchesSearch =
-          `${task.title} ${task.customer} ${task.orderId ?? ''}`
+          `${task.title} ${task.description} ${task.size ?? ''} ${task.flavor ?? ''} ${customerRelated(task) ? `${task.customer} ${task.orderId ?? ''}` : ''}`
             .toLowerCase()
             .includes(query.trim().toLowerCase());
         return (
           matchesSearch &&
+          (!typeFilter || taskType(task) === typeFilter) &&
           matchesTaskCategory(task, category, library.categories) &&
           (assignee === 'Anyone' || task.assigneeIds.includes(assignee)) &&
           (priority === 'Any priority' || task.priority === priority) &&
@@ -113,6 +116,7 @@ export function Board({
     [
       tasks,
       query,
+      typeFilter,
       category,
       library.categories,
       assignee,
@@ -171,6 +175,7 @@ export function Board({
     demo.commit(remaining);
   }
   function resetFilters() {
+    setTypeFilter('');
     setQuery('');
     setCategory('');
     setAssignee('Anyone');
@@ -226,6 +231,15 @@ export function Board({
               <div
                 className={`board-filter-options ${filtersOpen ? 'filters-open' : ''}`}
               >
+                <select
+                  aria-label="Filter by task type"
+                  value={typeFilter}
+                  onChange={(e) => setTypeFilter(e.target.value)}
+                >
+                  <option value="">All Tasks</option>
+                  <option value="general_production">General Production</option>
+                  <option value="customer_related">Customer-Related</option>
+                </select>
                 <select
                   value={category}
                   onChange={(event) => setCategory(event.target.value)}

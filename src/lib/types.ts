@@ -31,6 +31,16 @@ export type StaffReference = Pick<
   'id' | 'name' | 'initials' | 'color' | 'photoDataUrl'
 > & { active?: boolean; removed?: boolean };
 export interface ProductionTask {
+  taskType?: 'general_production' | 'customer_related';
+  productionQuantity?: number;
+  size?: string;
+  flavor?: string;
+  productionDue?: string;
+  pickupAt?: string;
+  allergyNotes?: string;
+  legacyPickupSchedule?: boolean;
+  /** Calendar-only projection; never a second stored task. */
+  calendarMilestone?: 'production' | 'pickup';
   id: string;
   workspaceId: string;
   title: string;

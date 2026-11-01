@@ -1,4 +1,10 @@
 'use client';
+import {
+  customerRelated,
+  pickupDate,
+  productionSummary,
+  taskType,
+} from '@/lib/task-production';
 import { useProductionLibraryData } from './demo-session';
 import { categoryName, taskProductName } from '@/lib/production-library';
 
@@ -95,7 +101,9 @@ export function TaskDetails({
           <div>
             <p className="detail-reference">
               {taskProductName(task, products)}
-              {task.orderId ? ' · Order ' + task.orderId : ''}
+              {customerRelated(task) && task.orderId
+                ? ' · Reference ' + task.orderId
+                : ''}
             </p>
             <h2 id="task-title">{task.title}</h2>
           </div>
@@ -107,7 +115,31 @@ export function TaskDetails({
             <X size={20} />
           </button>
         </header>
-        {task.quantity && <p className="detail-quantity">{task.quantity}</p>}
+        {productionSummary(task) && (
+          <p className="detail-quantity">{productionSummary(task)}</p>
+        )}
+        {task.quantity && task.productionQuantity !== undefined && (
+          <p className="detail-note">
+            Original production details: {task.quantity}
+          </p>
+        )}
+        <p className="detail-note">
+          {taskType(task) === 'general_production'
+            ? 'General Production'
+            : 'Customer-Related'}
+        </p>
+        {task.legacyPickupSchedule && (
+          <p className="detail-note">
+            Legacy due / pickup date retained. Review the separate production
+            and pickup dates when editing.
+          </p>
+        )}
+        {task.allergyNotes?.trim() && (
+          <section className="detail-section task-handling-warning">
+            <h3>Allergy Notes / Special Handling</h3>
+            <p style={{ whiteSpace: 'pre-wrap' }}>{task.allergyNotes}</p>
+          </section>
+        )}
         {task.description && (
           <p className="task-description">{task.description}</p>
         )}
@@ -116,12 +148,14 @@ export function TaskDetails({
             <dt>Category</dt>
             <dd>{categoryName(task, categories)}</dd>
           </div>
+          {customerRelated(task) && task.customer && (
+            <div>
+              <dt>Customer</dt>
+              <dd>{task.customer}</dd>
+            </div>
+          )}
           <div>
-            <dt>Customer</dt>
-            <dd>{task.customer}</dd>
-          </div>
-          <div>
-            <dt>Due / pickup</dt>
+            <dt>Production Due</dt>
             <dd>
               <Clock3 size={14} />
               <time dateTime={task.deadline}>
@@ -134,6 +168,31 @@ export function TaskDetails({
               </time>
             </dd>
           </div>
+          {customerRelated(task) && pickupDate(task) && (
+            <div>
+              <dt>Pickup / Delivery</dt>
+              <dd>
+                {new Intl.DateTimeFormat(undefined, {
+                  timeZone: preferences.timeZone,
+                  dateStyle: 'medium',
+                  timeStyle: 'short',
+                  hourCycle: preferences.timeFormat === '24h' ? 'h23' : 'h12',
+                }).format(new Date(pickupDate(task)!))}
+              </dd>
+            </div>
+          )}
+          {task.size && (
+            <div>
+              <dt>Size / Dimensions</dt>
+              <dd>{task.size}</dd>
+            </div>
+          )}
+          {task.flavor && (
+            <div>
+              <dt>Flavor / Filling</dt>
+              <dd>{task.flavor}</dd>
+            </div>
+          )}
           <div>
             <dt>Priority</dt>
             <dd

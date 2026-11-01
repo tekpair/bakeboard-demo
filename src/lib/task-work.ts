@@ -1,3 +1,4 @@
+import { pickupDate, productionDue } from './task-production';
 import type { ProductionTask } from './types';
 import { productionDay } from './production-dates';
 
@@ -11,24 +12,19 @@ export function isProductionOverdue(task: ProductionTask, now: number) {
   return (
     task.status !== 'ready' &&
     task.status !== 'completed' &&
-    Date.parse(task.deadline) < now
+    Date.parse(productionDue(task)) < now
   );
 }
 export function isAwaitingCollection(task: ProductionTask, now: number) {
-  // A linked customer reference is the existing affirmative pickup signal.
-  // Unlinked counter batches and internal prep remain Ready, even after deadline.
-  return (
-    task.status === 'ready' &&
-    Boolean(task.orderId?.trim()) &&
-    Date.parse(task.deadline) < now
-  );
+  const pickup = pickupDate(task);
+  return task.status === 'ready' && !!pickup && Date.parse(pickup) < now;
 }
 export function isProductionDueSoon(
   task: ProductionTask,
   now: number,
   warningMinutes = 60,
 ) {
-  const remaining = Date.parse(task.deadline) - now;
+  const remaining = Date.parse(productionDue(task)) - now;
   return (
     task.status !== 'ready' &&
     task.status !== 'completed' &&

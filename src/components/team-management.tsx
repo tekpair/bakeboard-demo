@@ -1,4 +1,5 @@
 'use client';
+import { customerRelated } from '@/lib/task-production';
 
 import { SlidePanel } from './slide-panel';
 import { useState } from 'react';
@@ -442,7 +443,9 @@ function TeamMemberDetails({
                           hour: 'numeric',
                           minute: '2-digit',
                         }).format(new Date(task.deadline))}
-                        {task.customer ? ` · ${task.customer}` : ''}
+                        {customerRelated(task) && task.customer
+                          ? ` · ${task.customer}`
+                          : ''}
                       </small>
                     </span>
                     <span className={`status-badge badge-${task.status}`}>

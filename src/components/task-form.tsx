@@ -11,13 +11,20 @@ import {
   useProductionLibraryData,
   useWorkspacePreferences,
 } from './demo-session';
-import { Plus, Trash2, X } from 'lucide-react';
+import { ChefHat, ClipboardList, Plus, Trash2, X } from 'lucide-react';
 import type { Employee, ProductionTask, Status } from '@/lib/types';
 import {
   parseProductionDateTime,
   productionDateTimeInput,
   productionTime,
 } from '@/lib/production-dates';
+
+import {
+  pickupDate,
+  productionDue,
+  schedulingError,
+  taskType,
+} from '@/lib/task-production';
 
 const statuses: { value: Status; label: string }[] = [
   { value: 'todo', label: 'To Do' },
@@ -37,7 +44,17 @@ type Draft = Pick<
   | 'status'
   | 'checklist'
   | 'notes'
-> & { assigneeIds: string[]; orderId: string; productId: string };
+> & {
+  assigneeIds: string[];
+  orderId: string;
+  productId: string;
+  taskType: 'general_production' | 'customer_related';
+  productionQuantity: string;
+  size: string;
+  flavor: string;
+  pickupAt: string;
+  allergyNotes: string;
+};
 type FieldErrors = Partial<
   Record<
     | 'productId'
@@ -46,7 +63,9 @@ type FieldErrors = Partial<
     | 'customer'
     | 'deadline'
     | 'assigneeIds'
-    | 'checklist',
+    | 'checklist'
+    | 'productionQuantity'
+    | 'pickupAt',
     string
   >
 >;
@@ -83,6 +102,20 @@ export function TaskForm({
   const [error, setError] = useState('');
   const [errors, setErrors] = useState<FieldErrors>({});
   const [draft, setDraft] = useState<Draft>(() => ({
+    taskType: task ? taskType(task) : 'general_production',
+    productionQuantity: String(
+      task?.productionQuantity ?? (Number.parseInt(task?.quantity ?? '') || 1),
+    ),
+    size: task?.size ?? '',
+    flavor: task?.flavor ?? '',
+    allergyNotes: task?.allergyNotes ?? '',
+    pickupAt:
+      task && (task.pickupAt ?? pickupDate(task))
+        ? productionDateTimeInput(
+            (task.pickupAt ?? pickupDate(task))!,
+            formTimeZone,
+          )
+        : '',
     title: task?.title ?? '',
     description: task?.description ?? '',
     customer: task?.customer ?? '',
@@ -94,7 +127,7 @@ export function TaskForm({
       ? (task.productId ?? legacyProductId(task.category))
       : (initialProduct?.id ?? ''),
     deadline: task
-      ? productionDateTimeInput(task.deadline, formTimeZone)
+      ? productionDateTimeInput(productionDue(task), formTimeZone)
       : initialDate
         ? `${initialDate}T09:00`
         : productionDateTimeInput(Date.now() + 3_600_000, formTimeZone),
@@ -118,6 +151,10 @@ export function TaskForm({
   const update = <K extends keyof Draft>(key: K, value: Draft[K]) => {
     setDraft((current) => ({ ...current, [key]: value }));
     setError('');
+    if (key === 'taskType') {
+      setErrors({});
+      return;
+    }
     if (key === 'checklist') {
       const checklist = value as Draft['checklist'];
       setErrors((current) => {
@@ -165,13 +202,13 @@ export function TaskForm({
     )
       nextErrors.assigneeIds = 'New assignments must use active staff members.';
     if (!title) nextErrors.title = 'Enter a task name.';
-    if (!draft.description.trim())
-      nextErrors.description = 'Add a short description.';
-    if (!draft.customer.trim())
-      nextErrors.customer = 'Enter the customer name.';
-    if (!draft.deadline) nextErrors.deadline = 'Choose a pickup date and time.';
-    if (!task && !draft.assigneeIds.length)
-      nextErrors.assigneeIds = 'Choose at least one staff member.';
+    if (
+      !Number.isSafeInteger(Number(draft.productionQuantity)) ||
+      Number(draft.productionQuantity) < 1
+    )
+      nextErrors.productionQuantity = 'Enter a positive whole-number quantity.';
+    if (!draft.deadline)
+      nextErrors.deadline = 'Choose a production due date and time.';
     if (draft.checklist.some((item) => !item.label.trim()))
       nextErrors.checklist = 'Add a description or remove each empty step.';
     if (Object.keys(nextErrors).length) {
@@ -186,8 +223,29 @@ export function TaskForm({
       formTimeZone,
     );
     if (!deadline) {
-      setErrors({ deadline: 'Enter a valid pickup date and time.' });
+      setErrors({ deadline: 'Enter a valid production due date and time.' });
       setError('Enter a valid due date and time.');
+      return;
+    }
+    const pickup = draft.pickupAt
+      ? parseProductionDateTime(
+          draft.pickupAt,
+          task ? pickupDate(task) : undefined,
+          formTimeZone,
+        )
+      : undefined;
+    if (draft.taskType === 'customer_related' && draft.pickupAt && !pickup) {
+      setErrors({ pickupAt: 'Enter a valid pickup / delivery date and time.' });
+      setError('Please fix the highlighted fields.');
+      return;
+    }
+    const conflict =
+      draft.taskType === 'customer_related'
+        ? schedulingError(deadline.toISOString(), pickup?.toISOString())
+        : '';
+    if (conflict) {
+      setErrors({ deadline: conflict, pickupAt: conflict });
+      setError(conflict);
       return;
     }
     const id =
@@ -206,7 +264,14 @@ export function TaskForm({
       categoryId: draft.categoryId,
       productId: draft.productId,
       productName: selectedProduct?.name ?? task?.productName ?? draft.category,
+      taskType: draft.taskType,
+      productionQuantity: Number(draft.productionQuantity),
+      size: draft.size,
+      flavor: draft.flavor,
+      allergyNotes: draft.allergyNotes,
       quantity: task?.quantity,
+      productionDue: deadline.toISOString(),
+      pickupAt: pickup?.toISOString(),
       deadline: deadline.toISOString(),
       pickupTime: productionTime(
         deadline,
@@ -241,7 +306,12 @@ export function TaskForm({
             <p className="detail-reference">
               {task ? 'EDIT TASK' : 'NEW PRODUCTION TASK'}
             </p>
-            <h2 id="task-form-title">{task ? 'Edit task' : 'Create a task'}</h2>
+            <h2 id="task-form-title">{task ? 'Edit task' : 'Create a Task'}</h2>
+            <p className="detail-note">
+              {draft.taskType === 'general_production'
+                ? 'Everyday prep, batches, and bakery production.'
+                : 'Production for a customer request received elsewhere.'}
+            </p>
           </div>
           <button
             className="icon-button modal-close"
@@ -258,6 +328,38 @@ export function TaskForm({
               {error}
             </p>
           )}
+          <fieldset className="task-type-selector form-field-full">
+            <legend>Task type</legend>
+            {(
+              [
+                {
+                  value: 'general_production',
+                  label: 'General Production',
+                  Icon: ChefHat,
+                },
+                {
+                  value: 'customer_related',
+                  label: 'Customer-Related',
+                  Icon: ClipboardList,
+                },
+              ] as const
+            ).map(({ value, label, Icon }) => (
+              <label
+                key={value}
+                className={draft.taskType === value ? 'selected' : ''}
+              >
+                <input
+                  type="radio"
+                  name="taskType"
+                  value={value}
+                  checked={draft.taskType === value}
+                  onChange={() => update('taskType', value)}
+                />
+                <Icon size={17} aria-hidden="true" />
+                {label}
+              </label>
+            ))}
+          </fieldset>
           <label
             className={`form-field form-field-full ${errors.title ? 'has-error' : ''}`}
           >
@@ -281,9 +383,8 @@ export function TaskForm({
           <label
             className={`form-field form-field-full ${errors.description ? 'has-error' : ''}`}
           >
-            Description{' '}
+            Description (optional){' '}
             <textarea
-              required
               className={errors.description ? 'field-invalid' : undefined}
               aria-invalid={Boolean(errors.description)}
               aria-describedby={
@@ -293,29 +394,11 @@ export function TaskForm({
               maxLength={500}
               value={draft.description}
               onChange={(event) => update('description', event.target.value)}
-              placeholder="Production details and finishing instructions"
+              placeholder="Describe what needs to be prepared or completed..."
             />
             {errors.description && (
               <span id="description-error" className="field-error">
                 {errors.description}
-              </span>
-            )}
-          </label>
-          <label className={`form-field ${errors.customer ? 'has-error' : ''}`}>
-            Customer name{' '}
-            <input
-              required
-              className={errors.customer ? 'field-invalid' : undefined}
-              aria-invalid={Boolean(errors.customer)}
-              aria-describedby={errors.customer ? 'customer-error' : undefined}
-              maxLength={100}
-              value={draft.customer}
-              onChange={(event) => update('customer', event.target.value)}
-              placeholder="Customer or counter"
-            />
-            {errors.customer && (
-              <span id="customer-error" className="field-error">
-                {errors.customer}
               </span>
             )}
           </label>
@@ -384,8 +467,34 @@ export function TaskForm({
               </span>
             )}
           </label>
+          {(['productionQuantity', 'size', 'flavor'] as const).map((field) => (
+            <label
+              className={`form-field ${errors[field as keyof FieldErrors] ? 'has-error' : ''}`}
+              key={field}
+            >
+              {field === 'productionQuantity'
+                ? 'Quantity'
+                : field === 'size'
+                  ? 'Size / Dimensions (optional)'
+                  : 'Flavor / Filling (optional)'}
+              <input
+                type={field === 'productionQuantity' ? 'number' : 'text'}
+                min={field === 'productionQuantity' ? 1 : undefined}
+                step={field === 'productionQuantity' ? 1 : undefined}
+                maxLength={150}
+                value={draft[field]}
+                aria-invalid={!!errors[field as keyof FieldErrors]}
+                onChange={(e) => update(field, e.target.value)}
+              />
+              {errors[field as keyof FieldErrors] && (
+                <span className="field-error">
+                  {errors[field as keyof FieldErrors]}
+                </span>
+              )}
+            </label>
+          ))}
           <label className="form-field">
-            Date / pickup time ({formTimeZone}){' '}
+            Production Due ({formTimeZone}){' '}
             <input
               required
               type="datetime-local"
@@ -401,6 +510,22 @@ export function TaskForm({
               </span>
             )}
           </label>
+          {draft.taskType === 'customer_related' && (
+            <label
+              className={`form-field ${errors.pickupAt ? 'has-error' : ''}`}
+            >
+              Pickup / Delivery Date &amp; Time (optional)
+              <input
+                type="datetime-local"
+                value={draft.pickupAt}
+                aria-invalid={!!errors.pickupAt}
+                onChange={(e) => update('pickupAt', e.target.value)}
+              />
+              {errors.pickupAt && (
+                <span className="field-error">{errors.pickupAt}</span>
+              )}
+            </label>
+          )}
           <fieldset
             className={`staff-assignment form-field-full ${errors.assigneeIds ? 'has-error' : ''}`}
             aria-describedby={errors.assigneeIds ? 'assignee-error' : undefined}
@@ -475,13 +600,48 @@ export function TaskForm({
               ))}
             </select>
           </label>
-          <label className="form-field">
-            Customer order reference (optional){' '}
-            <input
-              maxLength={50}
-              value={draft.orderId}
-              onChange={(event) => update('orderId', event.target.value)}
-              placeholder="Optional"
+          {draft.taskType === 'customer_related' && (
+            <>
+              <label
+                className={`form-field ${errors.customer ? 'has-error' : ''}`}
+              >
+                Customer name (optional){' '}
+                <input
+                  className={errors.customer ? 'field-invalid' : undefined}
+                  aria-invalid={Boolean(errors.customer)}
+                  aria-describedby={
+                    errors.customer ? 'customer-error' : undefined
+                  }
+                  maxLength={100}
+                  value={draft.customer}
+                  onChange={(event) => update('customer', event.target.value)}
+                  placeholder="Customer or counter"
+                />
+                {errors.customer && (
+                  <span id="customer-error" className="field-error">
+                    {errors.customer}
+                  </span>
+                )}
+              </label>
+              <label className="form-field">
+                Linked Order ID (optional){' '}
+                <input
+                  maxLength={50}
+                  value={draft.orderId}
+                  onChange={(event) => update('orderId', event.target.value)}
+                  placeholder="External order reference"
+                />
+              </label>
+            </>
+          )}
+          <label className="form-field form-field-full">
+            Allergy Notes / Special Handling (optional)
+            <textarea
+              rows={2}
+              maxLength={2000}
+              value={draft.allergyNotes}
+              onChange={(e) => update('allergyNotes', e.target.value)}
+              placeholder="Allergens, ingredient restrictions, cross-contact precautions, or special handling instructions..."
             />
           </label>
           <fieldset

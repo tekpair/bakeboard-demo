@@ -32,6 +32,7 @@ Demo changes are saved in the current browser's local storage. **Reset Demo** re
 ```sh
 npm run lint
 npm run typecheck
+npm run test:production
 npm run build
 ```
 

@@ -49,8 +49,31 @@ export function createSampleTasks(now = Date.now()): ProductionTask[] {
     },
   ): ProductionTask => ({
     ...value,
+    taskType:
+      value.title === 'Morning pastry prep'
+        ? 'general_production'
+        : 'customer_related',
+    customer: value.title === 'Morning pastry prep' ? '' : value.customer,
+    productionQuantity: Number.parseInt(value.quantity ?? '') || 1,
+    size: value.id === 'BB-1042' ? '8-inch' : undefined,
+    flavor: value.quantity?.split(' · ')[1],
+    allergyNotes:
+      value.id === 'BB-1042'
+        ? 'Contains milk, eggs, and wheat. Keep separate from nut decorations.'
+        : undefined,
+    pickupAt:
+      value.title === 'Morning pastry prep'
+        ? undefined
+        : value.deadline.toISOString(),
+    productionDue: new Date(
+      value.deadline.getTime() -
+        (value.title === 'Morning pastry prep' ? 0 : 3600000),
+    ).toISOString(),
     workspaceId: workspace.id,
-    deadline: value.deadline.toISOString(),
+    deadline: new Date(
+      value.deadline.getTime() -
+        (value.title === 'Morning pastry prep' ? 0 : 3600000),
+    ).toISOString(),
     pickupTime: productionTime(value.deadline, productionTimeZone),
   });
 

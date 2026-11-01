@@ -1,4 +1,9 @@
 'use client';
+import {
+  customerRelated,
+  pickupDate,
+  productionSummary,
+} from '@/lib/task-production';
 import { useProductionLibraryData } from './demo-session';
 import { taskProductName } from '@/lib/production-library';
 
@@ -41,7 +46,6 @@ import {
   canManageTasks,
   canUpdateTask,
   isProductionOverdue,
-  isProductionDueSoon,
   isAwaitingCollection,
   localDay,
 } from '@/lib/task-work';
@@ -123,12 +127,18 @@ export function OverviewDashboard({
     isProductionOverdue(task, now),
   );
   const overdueIds = new Set(overdueTasks.map((task) => task.id));
-  const readyForCollection = dayTasks.filter((task) => task.status === 'ready');
-  const upcoming = dayTasks.filter(
+  const pickups = tasks.filter(
     (task) =>
-      task.status !== 'ready' &&
-      task.status !== 'completed' &&
-      new Date(task.deadline).getTime() >= now,
+      pickupDate(task) &&
+      localDay(pickupDate(task)!, preferences.timeZone) === selectedDate &&
+      task.status !== 'completed',
+  );
+  const pickupAttention = pickups.filter(
+    (task) => task.status !== 'ready' && Date.parse(pickupDate(task)!) < now,
+  );
+  const readyForCollection = pickups.filter((task) => task.status === 'ready');
+  const upcoming = pickups.filter(
+    (task) => task.status !== 'ready' && Date.parse(pickupDate(task)!) >= now,
   );
   const production = [...dayTasks].sort(
     (a, b) =>
@@ -136,7 +146,7 @@ export function OverviewDashboard({
       a.deadline.localeCompare(b.deadline),
   );
   const byPickup = (a: ProductionTask, b: ProductionTask) =>
-    a.deadline.localeCompare(b.deadline);
+    (pickupDate(a) ?? '').localeCompare(pickupDate(b) ?? '');
   const stepsDone = dayTasks.reduce(
     (total, task) => total + task.checklist.filter((step) => step.done).length,
     0,
@@ -174,7 +184,7 @@ export function OverviewDashboard({
       tone: 'progress',
     },
     {
-      label: 'Ready for pickup',
+      label: 'Ready',
       value: dayTasks.filter((task) => task.status === 'ready').length,
       Icon: PackageCheck,
       href: `/demo/board?date=${selectedDate}&status=ready`,
@@ -344,7 +354,7 @@ export function OverviewDashboard({
             <div className="table-labels" aria-hidden="true">
               <span>Task / customer</span>
               <span>Status</span>
-              <span>Pickup</span>
+              <span>Production due</span>
               <span>Assigned</span>
             </div>
             <ul className="production-list">
@@ -361,15 +371,15 @@ export function OverviewDashboard({
                       {task.title}
                     </button>
                     <p>
-                      {task.quantity &&
+                      {productionSummary(task) &&
                       task.productId &&
                       taskProductName(task, products) !== task.category
                         ? `${taskProductName(task, products)} · `
                         : ''}
-                      {task.quantity
-                        ? `${task.quantity.split(' · ')[0]} · `
+                      {productionSummary(task)
+                        ? `${productionSummary(task)} · `
                         : `${taskProductName(task, products)} · `}
-                      {task.customer}
+                      {customerRelated(task) ? task.customer : ''}
                     </p>
                   </div>
                   <div className="production-status">
@@ -471,7 +481,7 @@ export function OverviewDashboard({
             <div className="pickup-groups">
               <PickupGroup
                 title="Needs Attention"
-                tasks={[...overdueTasks].sort(byPickup)}
+                tasks={[...pickupAttention].sort(byPickup)}
                 type="attention"
                 now={now}
                 warningMinutes={warningMinutes}
@@ -606,12 +616,13 @@ function PickupGroup({
         <ul className="pickup-list">
           {tasks.map((task) => {
             const minutesUntil = Math.ceil(
-              (new Date(task.deadline).getTime() - now) / 60_000,
+              (new Date(pickupDate(task)!).getTime() - now) / 60_000,
             );
             const needsWarning =
               type === 'attention' ||
               (type === 'upcoming' &&
-                isProductionDueSoon(task, now, warningMinutes));
+                minutesUntil >= 0 &&
+                minutesUntil <= warningMinutes);
             const readyPastPickup = isAwaitingCollection(task, now);
             const alertText =
               type === 'attention'
@@ -624,9 +635,9 @@ function PickupGroup({
                 className={`pickup-row ${needsWarning || readyPastPickup ? 'pickup-attention' : ''}`}
                 key={task.id}
               >
-                <time dateTime={task.deadline}>
+                <time dateTime={pickupDate(task)!}>
                   {productionTime(
-                    task.deadline,
+                    pickupDate(task)!,
                     preferences.timeZone,
                     preferences.timeFormat,
                   )}
@@ -637,7 +648,7 @@ function PickupGroup({
                     type="button"
                     onClick={() => onSelect(task.id)}
                   >
-                    {task.customer}
+                    {task.customer || task.title}
                   </button>
                   <p>{task.title}</p>
                   <span className={`status-badge badge-${task.status}`}>

@@ -7,6 +7,7 @@
     "build": "next build",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "test:production": "node tests/universal-production.cjs",
     "format": "prettier --write ."
   },
   "dependencies": {
