@@ -230,7 +230,7 @@ export function TaskForm({
     const pickup = draft.pickupAt
       ? parseProductionDateTime(
           draft.pickupAt,
-          task ? pickupDate(task) : undefined,
+          task ? (task.pickupAt ?? pickupDate(task)) : undefined,
           formTimeZone,
         )
       : undefined;
