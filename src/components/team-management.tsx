@@ -2,17 +2,15 @@
 import { customerRelated } from '@/lib/task-production';
 
 import { SlidePanel } from './slide-panel';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   ArrowRight,
   Mail,
   Pencil,
   Plus,
-  Save,
   Search,
   ShieldCheck,
   Trash2,
-  UserPlus,
   UserRound,
   Users,
 } from 'lucide-react';
@@ -552,6 +550,7 @@ function TeamMemberForm({
   onSave: (employee: Employee) => string | null;
   onClose: () => void;
 }) {
+  const fieldsRef = useRef<HTMLDivElement>(null);
   const [firstName, setFirstName] = useState(
     employee?.name.split(' ')[0] ?? '',
   );
@@ -573,6 +572,7 @@ function TeamMemberForm({
     (!!email.trim() && !validEmployeeEmail(email.trim()));
   function submit(event: React.FormEvent) {
     event.preventDefault();
+    fieldsRef.current?.scrollTo({ top: 0 });
     setSubmitted(true);
     if (!firstName.trim() || !lastName.trim()) {
       setError('Enter a first and last name.');
@@ -617,7 +617,12 @@ function TeamMemberForm({
           setError('');
         }}
       >
-        <div className="library-form-fields staff-form-fields">
+        <div ref={fieldsRef} className="library-form-fields staff-form-fields">
+          {error && (
+            <p className="form-error" role="alert">
+              {error}
+            </p>
+          )}
           <div className="task-form">
             <label className="form-field">
               <span className="task-field-label">
@@ -701,11 +706,6 @@ function TeamMemberForm({
           <p className="demo-inline-note team-form-demo-note">
             Demo preview · Staff changes stay in this browser.
           </p>
-          {error && (
-            <p className="form-error" role="alert">
-              {error}
-            </p>
-          )}
         </div>
         <footer className="task-form-footer team-form-footer">
           <button
@@ -716,11 +716,6 @@ function TeamMemberForm({
             Cancel
           </button>
           <button type="submit" className="button button-primary">
-            {employee ? (
-              <Save size={15} aria-hidden="true" />
-            ) : (
-              <UserPlus size={15} aria-hidden="true" />
-            )}
             {employee ? 'Save changes' : 'Add member'}
           </button>
         </footer>
