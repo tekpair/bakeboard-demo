@@ -1,6 +1,6 @@
 import { MarketingHeader, Footer } from '@/components/marketing';
 import { PricingPlans } from '@/components/pricing-plans';
-import { ProductPreview } from '@/components/product-preview';
+import { MarketingImageSlot } from '@/components/marketing-image-slot';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -53,11 +53,7 @@ export default function HomePage() {
               </p>
             </div>
             <div className="home-hero-product">
-              <div className="home-product-label">
-                <span />
-                One shared view of your bakery’s day
-              </div>
-              <ProductPreview kind="board" />
+              <MarketingImageSlot kind="board" />
               <div className="home-hero-sticker">
                 <ListChecks size={23} aria-hidden="true" />
                 <span>
@@ -66,23 +62,6 @@ export default function HomePage() {
                 </span>
               </div>
             </div>
-          </div>
-          <div className="home-use-cases wrap">
-            <p>Made for your everyday bakery work</p>
-            <ul>
-              <li>
-                <ClipboardList size={18} aria-hidden="true" />
-                Customer order tracking
-              </li>
-              <li>
-                <CalendarDays size={18} aria-hidden="true" />
-                Daily production
-              </li>
-              <li>
-                <UsersRound size={18} aria-hidden="true" />
-                Staff coordination
-              </li>
-            </ul>
           </div>
         </section>
 
@@ -108,13 +87,13 @@ export default function HomePage() {
               },
               {
                 Icon: LibraryBig,
-                title: 'Keep your go-to details close',
+                title: 'Keep your details close',
                 text: 'Organize products and categories, with reusable production checklist templates in Plus.',
                 label: 'Production Library',
               },
               {
                 Icon: UsersRound,
-                title: 'Give everyone a clear next step',
+                title: "Everyone get's a next step",
                 text: 'Assign work, follow checklist progress, and let each staff member focus on their own task list.',
                 label: 'My Tasks',
               },
@@ -133,7 +112,7 @@ export default function HomePage() {
 
         <section className="home-feature-band home-feature-tinted">
           <div className="home-feature-row wrap">
-            <ProductPreview kind="calendar" />
+            <MarketingImageSlot kind="calendar" />
             <div className="home-feature-copy">
               <p className="home-pill">
                 <CalendarDays size={16} aria-hidden="true" />
@@ -165,11 +144,11 @@ export default function HomePage() {
         </section>
         <section className="home-feature-band">
           <div className="home-feature-row home-feature-reverse wrap">
-            <ProductPreview kind="details" />
+            <MarketingImageSlot kind="details" />
             <div className="home-feature-copy">
               <p className="home-pill">
                 <ListChecks size={16} aria-hidden="true" />
-                Details that stay with the work
+                Task Details
               </p>
               <h2>
                 Fewer loose notes.
@@ -196,17 +175,6 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-        <div className="home-purpose-note wrap">
-          <ClipboardList size={23} aria-hidden="true" />
-          <p>
-            <strong>You take the order. BakeBoard helps track the work.</strong>
-            <br />
-            Record customer orders received through your existing channels.
-            Ordering, checkout, and payments stay with the tools you already
-            use.
-          </p>
-        </div>
-
         <section id="how-it-works" className="home-workflow-band">
           <div className="wrap">
             <div className="home-section-intro">

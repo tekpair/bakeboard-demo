@@ -10,8 +10,7 @@ export function Footer() {
           <Brand light />
           <p>Less chaos. More baking.</p>
           <p className="footer-description">
-            Production and customer order tracking for the people behind the
-            bakes.
+            The simplest way to keep your bakery running smoothly.
           </p>
           <span>
             © {new Date().getFullYear()} BakeBoard. All rights reserved.

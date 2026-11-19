@@ -2,25 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import {
-  ArrowLeft,
-  ArrowUpRight,
-  LayoutDashboard,
-  ClipboardList,
-  CalendarDays,
-  LibraryBig,
-  BookOpen,
-  ListChecks,
-  Users,
-  Settings,
-  PanelLeftClose,
-  PanelLeftOpen,
-  Menu,
-  Plus,
-  RotateCcw,
-  Sparkles,
-  X,
-} from 'lucide-react';
+import { SidebarIcon } from './sidebar-icon';
 import { WorkspaceAvatar } from './workspace-avatar';
 import { Avatar, Brand } from './ui';
 import type { ProductionTask, Workspace } from '@/lib/types';
@@ -224,7 +206,7 @@ export function AppShell({
             aria-label="Close navigation"
             onClick={() => setMobileOpen(false)}
           >
-            <X size={20} />
+            <SidebarIcon name="close" size={20} />
           </button>
           <button
             className="icon-button collapse-button"
@@ -234,9 +216,9 @@ export function AppShell({
             onClick={() => setCollapsed(!collapsed)}
           >
             {collapsed ? (
-              <PanelLeftOpen size={18} />
+              <SidebarIcon name="expand" size={18} />
             ) : (
-              <PanelLeftClose size={18} />
+              <SidebarIcon name="collapse" size={18} />
             )}
           </button>
         </div>
@@ -270,7 +252,7 @@ export function AppShell({
               window.location.reload();
             }}
           >
-            <RotateCcw size={15} aria-hidden="true" />
+            <SidebarIcon name="reset" size={15} aria-hidden="true" />
             <span className="sidebar-text">Reset Demo</span>
           </button>
         )}
@@ -282,28 +264,28 @@ export function AppShell({
                 {
                   href: '/demo/overview',
                   label: 'Overview',
-                  Icon: LayoutDashboard,
+                  icon: 'overview' as const,
                 },
                 {
                   href: '/demo/board',
                   label: 'Production Board',
-                  Icon: ClipboardList,
+                  icon: 'board' as const,
                 },
                 {
                   href: '/demo/calendar',
                   label: 'Calendar',
-                  Icon: CalendarDays,
+                  icon: 'calendar' as const,
                 },
                 ...(libraryVisible
                   ? [
                       {
                         href: '/demo/library',
                         label: 'Production Library',
-                        Icon: LibraryBig,
+                        icon: 'library' as const,
                       },
                     ]
                   : []),
-              ].map(({ href, label, Icon }) => {
+              ].map(({ href, label, icon }) => {
                 const link = (
                   <Link
                     title={collapsed ? label : undefined}
@@ -313,7 +295,7 @@ export function AppShell({
                     aria-current={path === href ? 'page' : undefined}
                     onClick={() => setMobileOpen(false)}
                   >
-                    <Icon size={18} />
+                    <SidebarIcon name={icon} size={18} />
                     <span className="sidebar-text">{label}</span>
                   </Link>
                 );
@@ -332,7 +314,11 @@ export function AppShell({
                             if (plan === 'Starter') setUpgradeBoardsOpen(true);
                           }}
                         >
-                          <Plus size={15} aria-hidden="true" />
+                          <SidebarIcon
+                            name="plus"
+                            size={15}
+                            aria-hidden="true"
+                          />
                         </button>
                       )}
                       {taskCount > 0 && (
@@ -364,7 +350,7 @@ export function AppShell({
                 className={`sidebar-link ${path === '/demo/my-tasks' ? 'active' : ''}`}
                 onClick={() => setMobileOpen(false)}
               >
-                <ListChecks size={18} />
+                <SidebarIcon name="tasks" size={18} />
                 <span className="sidebar-text">My Tasks</span>
               </Link>
             </nav>
@@ -382,7 +368,7 @@ export function AppShell({
                 className={`sidebar-link ${path === '/demo/team' ? 'active' : ''}`}
                 onClick={() => setMobileOpen(false)}
               >
-                <Users size={18} />
+                <SidebarIcon name="staff" size={18} />
                 <span className="sidebar-text">Staff Management</span>
               </Link>
               {settingsVisible && (
@@ -394,7 +380,7 @@ export function AppShell({
                   className={`sidebar-link ${path === '/demo/settings' ? 'active' : ''}`}
                   onClick={() => setMobileOpen(false)}
                 >
-                  <Settings size={18} />
+                  <SidebarIcon name="settings" size={18} />
                   <span className="sidebar-text">Workspace Settings</span>
                 </Link>
               )}
@@ -407,11 +393,11 @@ export function AppShell({
               <div>
                 <h4>Starter Preview</h4>
                 <Link href="/pricing">
-                  Explore Plus <ArrowUpRight size={14} />
+                  Explore Plus <SidebarIcon name="upRight" size={14} />
                 </Link>
               </div>
               <span className="sidebar-upgrade-badge" aria-hidden="true">
-                <Sparkles size={18} />
+                <SidebarIcon name="sparkles" size={18} />
               </span>
             </div>
           )}
@@ -422,7 +408,7 @@ export function AppShell({
             aria-label="Help Center Guides"
             onClick={() => setMobileOpen(false)}
           >
-            <BookOpen size={18} />
+            <SidebarIcon name="help" size={18} />
             <span className="sidebar-text">Help Center Guides</span>
           </Link>
           <Link
@@ -431,7 +417,7 @@ export function AppShell({
             title="Back to website"
             aria-label="Back to website"
           >
-            <ArrowLeft size={16} />
+            <SidebarIcon name="back" size={16} />
             <span className="sidebar-text">Back to website</span>
           </Link>
           <div
@@ -509,7 +495,7 @@ export function AppShell({
                     setMobileOpen(false);
                   }}
                 >
-                  <Settings size={15} aria-hidden="true" />
+                  <SidebarIcon name="settings" size={15} aria-hidden="true" />
                   Account Settings
                 </Link>
               </div>
@@ -543,7 +529,7 @@ export function AppShell({
                 Maybe later
               </button>
               <Link className="button button-primary" href="/pricing">
-                Explore Plus <ArrowUpRight size={15} />
+                Explore Plus <SidebarIcon name="upRight" size={15} />
               </Link>
             </div>
           </div>
@@ -559,7 +545,7 @@ export function AppShell({
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen(true)}
           >
-            <Menu size={20} />
+            <SidebarIcon name="menu" size={20} />
           </button>
           <div className="breadcrumb">
             {path.endsWith('profile')
