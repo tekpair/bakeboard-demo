@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowUpRight, Wheat } from 'lucide-react';
+import Image from 'next/image';
 export { StaffAvatar as Avatar } from './staff-avatar';
 export function Brand({ light = false }: { light?: boolean }) {
   return (
@@ -8,10 +8,13 @@ export function Brand({ light = false }: { light?: boolean }) {
       className={`brand ${light ? 'brand-light' : ''}`}
       aria-label="BakeBoard home"
     >
-      <span className="brand-icon">
-        <Wheat size={23} strokeWidth={1.7} />
-      </span>
-      BakeBoard
+      <Image
+        className="brand-horizontal"
+        src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/brand/logo-horizontal${light ? '-light' : ''}.svg`}
+        alt="BakeBoard"
+        width={240}
+        height={72}
+      />
     </Link>
   );
 }
@@ -28,7 +31,6 @@ export function DemoLink({
       href="/demo/overview"
     >
       {children}
-      <ArrowUpRight size={16} />
     </Link>
   );
 }

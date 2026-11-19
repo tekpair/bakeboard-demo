@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Check, ArrowUpRight, Sparkles, Sprout } from 'lucide-react';
+import { Check, Sparkles, Sprout } from 'lucide-react';
 import Link from 'next/link';
 export function PricingPlans({ compact = false }: { compact?: boolean }) {
   const [yearly, setYearly] = useState(false);
@@ -81,7 +81,6 @@ export function PricingPlans({ compact = false }: { compact?: boolean }) {
               className={`button ${i ? 'button-primary' : 'button-outline'}`}
             >
               {i ? 'Explore Plus' : 'Try Free Demo'}
-              <ArrowUpRight size={15} />
             </Link>
             <ul>
               {p.features.map((f, j) => (

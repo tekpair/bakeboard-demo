@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { ArrowUpRight, House } from 'lucide-react';
+import Image from 'next/image';
+import { House } from 'lucide-react';
 import { Footer, MarketingHeader } from '@/components/marketing';
 
 export default function NotFound() {
@@ -8,6 +9,13 @@ export default function NotFound() {
       <MarketingHeader />
       <main id="main" className="not-found-page">
         <div className="not-found-card wrap">
+          <Image
+            className="not-found-logo"
+            src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/brand/logo-standalone.svg`}
+            alt=""
+            width={150}
+            height={150}
+          />
           <p className="eyebrow">404 · Page not found</p>
           <h1>We couldn&apos;t find that page.</h1>
           <p>
@@ -19,7 +27,7 @@ export default function NotFound() {
               <House size={16} aria-hidden="true" /> Back to homepage
             </Link>
             <Link className="button button-outline" href="/demo/overview">
-              Try Free Demo <ArrowUpRight size={16} aria-hidden="true" />
+              Try Free Demo
             </Link>
           </div>
         </div>

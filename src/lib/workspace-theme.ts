@@ -4,10 +4,10 @@ export const themePresets: Record<
   WorkspaceAppearance & { name: string }
 > = {
   'classic-sage': {
-    name: 'Classic Sage',
+    name: 'BakeBoard Original',
     preset: 'classic-sage',
-    accent: '#3d5848',
-    background: '#fafbf8',
+    accent: '#0f2543',
+    background: '#fff4e6',
     surface: '#ffffff',
   },
   'soft-rose': {
@@ -34,8 +34,8 @@ export const themePresets: Record<
 };
 export const defaultAppearance: WorkspaceAppearance = {
   preset: 'classic-sage',
-  accent: '#3d5848',
-  background: '#fafbf8',
+  accent: '#0f2543',
+  background: '#fff4e6',
   surface: '#ffffff',
 };
 // Colors are derived from a preset, including when reading older custom themes.

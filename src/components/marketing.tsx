@@ -1,26 +1,18 @@
 import Link from 'next/link';
-import { Brand, DemoLink } from './ui';
-export function MarketingHeader() {
-  return (
-    <header className="marketing-header wrap">
-      <Brand />
-      <nav aria-label="Main navigation">
-        <Link href="/#features">Features</Link>
-        <Link href="/about">About Us</Link>
-        <Link href="/help">Help Center</Link>
-        <Link href="/pricing">Pricing</Link>
-      </nav>
-      <DemoLink />
-    </header>
-  );
-}
+import { Brand } from './ui';
+import { MarketingNavigation as MarketingHeader } from './marketing-navigation';
+export { MarketingHeader };
 export function Footer() {
   return (
     <footer className="footer-band">
       <div className="footer wrap">
         <div className="footer-brand">
-          <Brand />
+          <Brand light />
           <p>Less chaos. More baking.</p>
+          <p className="footer-description">
+            Production and customer order tracking for the people behind the
+            bakes.
+          </p>
           <span>
             © {new Date().getFullYear()} BakeBoard. All rights reserved.
           </span>

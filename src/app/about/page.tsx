@@ -1,4 +1,4 @@
-import { ArrowUpRight } from 'lucide-react';
+import Image from 'next/image';
 import { Footer, MarketingHeader } from '@/components/marketing';
 import { DemoLink } from '@/components/ui';
 
@@ -15,6 +15,18 @@ export default function AboutPage() {
       <main id="main" className="about-page">
         <section className="about-hero-band">
           <div className="about-hero wrap">
+            <div className="about-origin-mark" aria-hidden="true">
+              <Image
+                src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/brand/logo-standalone.svg`}
+                alt=""
+                width={260}
+                height={260}
+              />
+              <span>
+                A real bakery.
+                <br />A practical idea.
+              </span>
+            </div>
             <p className="eyebrow">A little about BakeBoard.</p>
             <h1>
               Built with bakeries in mind.
@@ -131,7 +143,7 @@ export default function AboutPage() {
                 className="button button-outline"
                 href="mailto:hello@bakeboard.co?subject=BakeBoard%20feedback&body=What%20would%20make%20your%20bakery%27s%20day%20easier%3F%0A%0A"
               >
-                Share Your Feedback <ArrowUpRight size={16} />
+                Share Your Feedback
               </a>
             </div>
           </div>

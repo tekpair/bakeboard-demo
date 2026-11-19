@@ -191,7 +191,7 @@ Select your name and role at the bottom of the sidebar. In the demo controls, se
 
 ### Choose a preset
 
-Select one of the four themes: **Classic Sage** for BakeBoard's signature green, **Soft Rose** for gentle rose tones, **Warm Neutral** for earthy colors, or **Slate Blue** for a cool muted palette. Theme colors come from these presets; individual colors cannot be edited.
+Select one of the four themes: **BakeBoard Original** for BakeBoard's navy and cream palette, **Soft Rose** for gentle rose tones, **Warm Neutral** for earthy colors, or **Slate Blue** for a cool muted palette. Theme colors come from these presets; individual colors cannot be edited.
 
 Select **Save Changes** to apply your choice throughout the bakery workspace. Changing the theme does not alter tasks, staff assignments, or other production information.
 

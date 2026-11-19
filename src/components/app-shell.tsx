@@ -97,14 +97,14 @@ export function AppShell({
     '--workspace-progress': 'color-mix(in srgb, var(--green) 82%, white)',
     '--sage': hasPlanCapability(plan, 'personalization')
       ? accentTint(appearance.accent)
-      : '#e7eee4',
+      : '#e4eee5',
     '--workspace-nav': hasPlanCapability(plan, 'personalization')
       ? accentTint(appearance.accent)
-      : '#eaf0e6',
-    '--workspace-sidebar': '#fafbf8',
+      : '#e8edf2',
+    '--workspace-sidebar': '#fffdf9',
     '--workspace-outside': hasPlanCapability(plan, 'personalization')
       ? appearance.background
-      : '#f7f8f4',
+      : '#fff4e6',
   } as React.CSSProperties;
   const restricted =
     !ready ||
