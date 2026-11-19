@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { SidebarIcon } from './sidebar-icon';
 import { WorkspaceAvatar } from './workspace-avatar';
+import { OwnerWorkspaceMenu } from './owner-workspace-menu';
 import { Avatar, Brand } from './ui';
 import type { ProductionTask, Workspace } from '@/lib/types';
 import { useDemoSession } from './demo-session';
@@ -52,7 +53,7 @@ export function AppShell({
   const addBoardRef = useRef<HTMLButtonElement>(null);
   const sidebarRef = useRef<HTMLElement>(null);
   const mobileToggleRef = useRef<HTMLButtonElement>(null);
-  const path = usePathname();
+  const path = usePathname().replace(/\/+$/, '') || '/';
   const staffVisible =
     ready && !accessRevoked && hasCapability(role, 'viewStaffSection');
   const managementVisible =
@@ -93,6 +94,7 @@ export function AppShell({
     accessRevoked ||
     (path.startsWith('/demo/team') && !managementVisible) ||
     (path.startsWith('/demo/settings') && !settingsVisible) ||
+    (path.startsWith('/demo/subscription') && !settingsVisible) ||
     (path.startsWith('/demo/library') && !libraryVisible) ||
     (path.startsWith('/demo/my-tasks') && !staffVisible);
   useEffect(() => {
@@ -540,7 +542,9 @@ export function AppShell({
           <div className="breadcrumb">
             {path.endsWith('profile')
               ? 'Account Settings'
-              : path.endsWith('team') || path.endsWith('settings')
+              : path.endsWith('team') ||
+                  path.endsWith('settings') ||
+                  path.endsWith('subscription')
                 ? 'Management'
                 : path.endsWith('my-tasks')
                   ? 'Staff View'
@@ -551,26 +555,22 @@ export function AppShell({
                 ? 'My Profile'
                 : path.endsWith('library')
                   ? 'Production Library'
-                  : path.endsWith('settings')
-                    ? 'Workspace Settings'
-                    : path.endsWith('team')
-                      ? 'Staff Management'
-                      : path.endsWith('my-tasks')
-                        ? 'My Tasks'
-                        : path.endsWith('calendar')
-                          ? 'Calendar'
-                          : path.endsWith('board')
-                            ? 'Production Board'
-                            : 'Overview'}
+                  : path.endsWith('subscription')
+                    ? 'Manage Subscription'
+                    : path.endsWith('settings')
+                      ? 'Workspace Settings'
+                      : path.endsWith('team')
+                        ? 'Staff Management'
+                        : path.endsWith('my-tasks')
+                          ? 'My Tasks'
+                          : path.endsWith('calendar')
+                            ? 'Calendar'
+                            : path.endsWith('board')
+                              ? 'Production Board'
+                              : 'Overview'}
             </strong>
           </div>
-          <Link
-            href="/pricing"
-            className="demo-pill"
-            aria-label="Demo preview · view plans"
-          >
-            Demo · Preview
-          </Link>
+          <OwnerWorkspaceMenu />
         </header>
         {restricted ? (
           <main id="main" className="dashboard-main">

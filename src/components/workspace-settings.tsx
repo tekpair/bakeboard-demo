@@ -6,6 +6,7 @@ import { hasPlanCapability } from '@/lib/entitlements';
 import { themePresets } from '@/lib/workspace-theme';
 import { useDemoSession } from './demo-session';
 import { WorkspaceAvatar } from './workspace-avatar';
+import { WorkspaceOwnerControls } from './workspace-owner-controls';
 import { canAccessWorkspaceSettings } from '@/lib/permissions';
 import {
   deadlineWarningOptions,
@@ -636,6 +637,7 @@ export function WorkspaceSettingsPage() {
           )}
         </div>
       </form>
+      <WorkspaceOwnerControls />
     </main>
   );
 }

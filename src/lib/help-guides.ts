@@ -130,9 +130,17 @@ Set the default task priority and deadline warning threshold. The built-in produ
 
 **Workspace Information** shows the workspace name and ID, permanent Owner, current plan, and demo status. These details are for reference. Select **Save Changes** to apply edits, or **Cancel** to discard them.
 
+### Subscription and password previews
+
+The Owner can select **Manage Subscription** in Workspace Settings to compare plans, switch the demo plan preview, and preview cancellation. No active subscription, payments, or recurring charges are connected in the demo.
+
+**Workspace Password** lets the Owner preview a password change using a sample password. Enter at least **12 characters**, confirm it, and select **Preview password change**. No password is stored or changed.
+
+Owners can also click the **bakery logo** at the top right to open **Overview**, **Workspace Settings**, **Manage Subscription**, or **Logout**. Logout returns to the public website without resetting saved demo changes.
+
 **Demo note:** Settings are saved in this browser. Clearing browser data or using **Reset Demo** may restore the original workspace settings.`,
     published: true,
-    updatedAt: '2026-10-30T12:00:00.000Z',
+    updatedAt: '2026-11-19T12:00:00.000Z',
   },
   {
     id: 'guide-time-zone-format',
