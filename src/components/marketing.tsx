@@ -39,7 +39,7 @@ export function Footer() {
             <Link href="/terms">Terms of Service</Link>
           </nav>
           <div className="footer-socials">
-            <p>Keep up with BakeBoard official updates!</p>
+            <p>Follow along with BakeBoard.</p>
             <div className="footer-social-icons">
               <span
                 className="footer-social-icon"
