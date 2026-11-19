@@ -59,9 +59,6 @@ export function ManageSubscription() {
             <CreditCard size={22} aria-hidden="true" />
             Your Plan
           </h2>
-          <span className="subscription-current-plan">
-            {session.plan} preview
-          </span>
         </header>
         <div className="owner-settings-content">
           <p className="subscription-intro">

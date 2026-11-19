@@ -1818,14 +1818,6 @@ ol {
 .subscription-page > .owner-demo-note {
   margin-bottom: 24px;
 }
-.subscription-current-plan {
-  padding: 5px 10px;
-  border-radius: 6px;
-  background: var(--workspace-control);
-  color: var(--green);
-  font-size: 12px;
-  font-weight: 600;
-}
 .subscription-intro {
   margin-bottom: 20px;
 }
