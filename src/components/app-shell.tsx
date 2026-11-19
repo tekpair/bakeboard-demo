@@ -226,7 +226,6 @@ export function AppShell({
           <WorkspaceAvatar workspace={workspace} />
           <span className="sidebar-text">
             <strong>{workspace.name}</strong>
-            <small>Bakery workspace</small>
           </span>
         </div>
         {!accessRevoked && (
@@ -410,15 +409,6 @@ export function AppShell({
           >
             <SidebarIcon name="help" size={18} />
             <span className="sidebar-text">Help Center Guides</span>
-          </Link>
-          <Link
-            href="/"
-            className="sidebar-link"
-            title="Back to website"
-            aria-label="Back to website"
-          >
-            <SidebarIcon name="back" size={16} />
-            <span className="sidebar-text">Back to website</span>
           </Link>
           <div
             className="profile-menu"

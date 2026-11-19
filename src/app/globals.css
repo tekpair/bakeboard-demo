@@ -1412,17 +1412,17 @@ ol {
   gap: 10px;
   padding: 8px 8px 12px;
 }
+.workspace-switch > .sidebar-text {
+  min-width: 0;
+}
 .workspace-switch strong {
   font-size: 13px;
   font-weight: 600;
   display: block;
+  line-height: 1.4;
   white-space: nowrap;
-}
-.workspace-switch small {
-  display: block;
-  color: var(--muted);
-  font-size: 10px;
-  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .sidebar-reset-demo {
   display: flex;
