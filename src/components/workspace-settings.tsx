@@ -6,7 +6,10 @@ import { hasPlanCapability } from '@/lib/entitlements';
 import { themePresets } from '@/lib/workspace-theme';
 import { useDemoSession } from './demo-session';
 import { WorkspaceAvatar } from './workspace-avatar';
-import { WorkspaceOwnerControls } from './workspace-owner-controls';
+import {
+  WorkspacePasswordSettings,
+  WorkspaceSubscriptionSettings,
+} from './workspace-owner-controls';
 import { canAccessWorkspaceSettings } from '@/lib/permissions';
 import {
   deadlineWarningOptions,
@@ -93,7 +96,7 @@ export function WorkspaceSettingsPage() {
       showToast('warning', 'Please fix the highlighted fields.');
       requestAnimationFrame(() =>
         formRef.current
-          ?.querySelector<HTMLElement>('[aria-invalid="true"]')
+          ?.querySelector<HTMLElement>('.settings-fields [aria-invalid="true"]')
           ?.focus(),
       );
       return;
@@ -257,6 +260,7 @@ export function WorkspaceSettingsPage() {
             </div>
           </fieldset>
         </section>
+        <WorkspacePasswordSettings />
         <section
           className="settings-section"
           aria-labelledby="preferences-title"
@@ -583,6 +587,7 @@ export function WorkspaceSettingsPage() {
             )}
           </div>
         </section>
+        <WorkspaceSubscriptionSettings />
         <section
           className="settings-section"
           aria-labelledby="information-title"
@@ -637,7 +642,6 @@ export function WorkspaceSettingsPage() {
           )}
         </div>
       </form>
-      <WorkspaceOwnerControls />
     </main>
   );
 }

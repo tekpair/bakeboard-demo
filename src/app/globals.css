@@ -1761,10 +1761,8 @@ ol {
   border-top: 1px solid var(--line);
   border-radius: 0 0 7px 7px;
 }
-.workspace-owner-controls {
-  margin-top: 24px;
-}
-.workspace-owner-controls h2,
+.settings-section[aria-labelledby='workspace-password-title'] h2,
+.settings-section[aria-labelledby='subscription-settings-title'] h2,
 .subscription-page .settings-section h2,
 .subscription-plan-option h3 {
   display: flex;
