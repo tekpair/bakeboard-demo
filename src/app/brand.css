@@ -50,7 +50,7 @@ textarea {
   line-height: 1;
 }
 .brand-horizontal {
-  width: 218px;
+  width: 180px;
   height: auto;
   display: block;
 }
@@ -99,7 +99,7 @@ textarea {
   border-bottom: 1px solid #0f25430d;
 }
 .marketing-header {
-  min-height: 100px;
+  min-height: 88px;
   gap: 32px;
   border: 0;
 }
@@ -1017,7 +1017,7 @@ textarea {
   gap: 17px;
 }
 .footer-brand .brand-horizontal {
-  width: 208px;
+  width: 180px;
 }
 .footer-brand p {
   color: var(--cream);
@@ -1129,7 +1129,7 @@ textarea {
     gap: 24px;
   }
   .brand-horizontal {
-    width: 192px;
+    width: 168px;
   }
   .marketing-header nav {
     gap: 20px;
@@ -1173,13 +1173,13 @@ textarea {
 }
 @media (max-width: 800px) {
   .marketing-header {
-    min-height: 86px;
+    min-height: 78px;
     gap: 16px;
     position: relative;
     flex-wrap: nowrap;
   }
   .marketing-header .brand-horizontal {
-    width: 190px;
+    width: 168px;
   }
   .marketing-menu-toggle {
     display: grid;
@@ -1330,7 +1330,7 @@ textarea {
     grid-template-columns: 1.5fr repeat(3, minmax(0, 1fr));
   }
   .footer-brand .brand-horizontal {
-    width: 165px;
+    width: 160px;
   }
 }
 @media (max-width: 600px) {
@@ -1339,7 +1339,7 @@ textarea {
     width: calc(100% - 40px);
   }
   .marketing-header .brand-horizontal {
-    width: 180px;
+    width: 160px;
   }
   .marketing-header .header-demo-link {
     display: none;
@@ -1737,7 +1737,7 @@ textarea {
     grid-column: 1 / -1;
   }
   .footer-brand .brand-horizontal {
-    width: 200px;
+    width: 168px;
   }
   .footer-brand p.footer-description {
     max-width: 280px;

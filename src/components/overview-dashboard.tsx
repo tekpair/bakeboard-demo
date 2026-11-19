@@ -13,7 +13,6 @@ import { useRouter } from 'next/navigation';
 import {
   ArrowRight,
   CakeSlice,
-  CheckCheck,
   CircleCheck,
   LoaderCircle,
   ListChecks,
@@ -147,17 +146,6 @@ export function OverviewDashboard({
   );
   const byPickup = (a: ProductionTask, b: ProductionTask) =>
     (pickupDate(a) ?? '').localeCompare(pickupDate(b) ?? '');
-  const stepsDone = dayTasks.reduce(
-    (total, task) => total + task.checklist.filter((step) => step.done).length,
-    0,
-  );
-  const stepsTotal = dayTasks.reduce(
-    (total, task) => total + task.checklist.length,
-    0,
-  );
-  const stepsPercent = stepsTotal
-    ? Math.round((stepsDone / stepsTotal) * 100)
-    : 0;
   const selectedTask = tasks.find((task) => task.id === selectedTaskId) ?? null;
   const stats: {
     label: string;
@@ -413,23 +401,6 @@ export function OverviewDashboard({
                 </li>
               )}
             </ul>
-          </div>
-          <div className="production-progress">
-            <div>
-              <label htmlFor="daily-progress">
-                <CheckCheck size={15} aria-hidden="true" />
-                Production Checklist progress
-              </label>
-              <span className="progress-summary">
-                <strong>{stepsPercent}%</strong>
-              </span>
-            </div>
-            <progress
-              id="daily-progress"
-              value={stepsDone}
-              max={stepsTotal || 1}
-              aria-label={`${stepsPercent}% of checklist steps completed`}
-            />
           </div>
         </section>
         <aside className="overview-side">

@@ -347,12 +347,8 @@ export function TaskForm({
           )}
           <section
             className="task-form-group"
-            aria-labelledby="task-details-heading"
+            aria-label="Task details"
           >
-            <h3 id="task-details-heading" className="task-form-group-heading">
-              <ClipboardList size={17} aria-hidden="true" />
-              Task Details
-            </h3>
             <fieldset className="task-type-selector form-field-full">
               <legend>Task type</legend>
               {(
@@ -591,7 +587,7 @@ export function TaskForm({
               id="task-scheduling-heading"
               className="task-form-group-heading"
             >
-              <CalendarClock size={17} aria-hidden="true" />
+              <CalendarClock size={21} aria-hidden="true" />
               Scheduling &amp; Assignment
             </h3>
             <label className="form-field">
@@ -736,7 +732,7 @@ export function TaskForm({
               id="task-instructions-heading"
               className="task-form-group-heading"
             >
-              <CookingPot size={17} aria-hidden="true" />
+              <CookingPot size={21} aria-hidden="true" />
               Production Instructions
             </h3>
             <label className="form-field form-field-full task-allergy-field">
