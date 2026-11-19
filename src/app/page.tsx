@@ -93,7 +93,7 @@ export default function HomePage() {
               },
               {
                 Icon: UsersRound,
-                title: "Everyone get's a next step",
+                title: 'Staff can follow along',
                 text: 'Assign work, follow checklist progress, and let each staff member focus on their own task list.',
                 label: 'My Tasks',
               },

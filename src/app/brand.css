@@ -1048,6 +1048,36 @@ textarea {
 .footer-group nav a:hover {
   color: var(--apricot);
 }
+.footer-socials {
+  margin-top: 24px;
+}
+.footer-socials > p {
+  max-width: 200px;
+  color: #b7c5d2;
+  font-size: 11px;
+  line-height: 1.7;
+}
+.footer-social-icons {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  width: 100%;
+  max-width: 114px;
+  margin-top: 12px;
+}
+.footer-social-icon {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  min-width: 0;
+  border-radius: 6px;
+  background: var(--cream);
+  color: var(--navy);
+}
+.footer-social-icon svg {
+  width: 62%;
+  height: 62%;
+}
 
 .app-shell {
   --ink: #0f2543;
