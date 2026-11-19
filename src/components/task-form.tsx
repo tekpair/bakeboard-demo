@@ -16,6 +16,7 @@ import {
   CalendarClock,
   CakeSlice,
   ChefHat,
+  ChevronDown,
   ClipboardList,
   Columns3,
   CookingPot,
@@ -121,6 +122,8 @@ export function TaskForm({
   const preferences = useWorkspacePreferences();
   const [formTimeZone] = useState(preferences.timeZone);
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const errorRef = useRef<HTMLParagraphElement>(null);
+  const [step, setStep] = useState<0 | 1 | 2>(0);
   const [error, setError] = useState('');
   const [errors, setErrors] = useState<FieldErrors>({});
   const [draft, setDraft] = useState<Draft>(() => ({
@@ -170,6 +173,17 @@ export function TaskForm({
       trigger?.focus();
     };
   }, []);
+  useEffect(() => {
+    dialogRef.current
+      ?.querySelector('.task-form-content')
+      ?.scrollTo({ top: 0 });
+    dialogRef.current
+      ?.querySelector<HTMLElement>(`#task-step-${step}`)
+      ?.focus({ preventScroll: true });
+  }, [step]);
+  useEffect(() => {
+    if (error) errorRef.current?.focus();
+  }, [error, errors]);
   const update = <K extends keyof Draft>(key: K, value: Draft[K]) => {
     setDraft((current) => ({ ...current, [key]: value }));
     setError('');
@@ -196,9 +210,7 @@ export function TaskForm({
       return next;
     });
   };
-  function submit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const title = draft.title.trim();
+  function taskErrors(): FieldErrors {
     const nextErrors: FieldErrors = {};
     const selectedProduct = library.products.find(
       (product) => product.id === draft.productId,
@@ -213,6 +225,16 @@ export function TaskForm({
       !draft.productId
     )
       nextErrors.productId = 'Choose an active product.';
+    if (!draft.title.trim()) nextErrors.title = 'Enter a task name.';
+    if (
+      !Number.isSafeInteger(Number(draft.productionQuantity)) ||
+      Number(draft.productionQuantity) < 1
+    )
+      nextErrors.productionQuantity = 'Enter a positive whole-number quantity.';
+    return nextErrors;
+  }
+  function scheduleErrors(): FieldErrors {
+    const nextErrors: FieldErrors = {};
     if (
       draft.assigneeIds.some(
         (id) =>
@@ -223,31 +245,13 @@ export function TaskForm({
       )
     )
       nextErrors.assigneeIds = 'New assignments must use active staff members.';
-    if (!title) nextErrors.title = 'Enter a task name.';
-    if (
-      !Number.isSafeInteger(Number(draft.productionQuantity)) ||
-      Number(draft.productionQuantity) < 1
-    )
-      nextErrors.productionQuantity = 'Enter a positive whole-number quantity.';
-    if (!draft.deadline)
-      nextErrors.deadline = 'Choose a production due date and time.';
-    if (draft.checklist.some((item) => !item.label.trim()))
-      nextErrors.checklist = 'Add a description or remove each empty step.';
-    if (Object.keys(nextErrors).length) {
-      setErrors(nextErrors);
-      setError('Please fix the highlighted fields before saving.');
-      return;
-    }
-    setErrors({});
     const deadline = parseProductionDateTime(
       draft.deadline,
       task?.deadline,
       formTimeZone,
     );
     if (!deadline) {
-      setErrors({ deadline: 'Enter a valid production due date and time.' });
-      setError('Enter a valid due date and time.');
-      return;
+      nextErrors.deadline = 'Choose a valid production due date and time.';
     }
     const pickup = draft.pickupAt
       ? parseProductionDateTime(
@@ -257,19 +261,73 @@ export function TaskForm({
         )
       : undefined;
     if (draft.taskType === 'customer_related' && draft.pickupAt && !pickup) {
-      setErrors({ pickupAt: 'Enter a valid pickup / delivery date and time.' });
-      setError('Please fix the highlighted fields.');
-      return;
+      nextErrors.pickupAt = 'Enter a valid pickup / delivery date and time.';
     }
     const conflict =
-      draft.taskType === 'customer_related'
+      draft.taskType === 'customer_related' && deadline
         ? schedulingError(deadline.toISOString(), pickup?.toISOString())
         : '';
     if (conflict) {
-      setErrors({ deadline: conflict, pickupAt: conflict });
-      setError(conflict);
+      nextErrors.deadline = conflict;
+      nextErrors.pickupAt = conflict;
+    }
+    return nextErrors;
+  }
+  function showErrors(nextErrors: FieldErrors) {
+    setErrors(nextErrors);
+    setError('Please fix the highlighted fields before continuing.');
+    if (
+      nextErrors.title ||
+      nextErrors.productId ||
+      nextErrors.productionQuantity
+    )
+      setStep(0);
+    else if (
+      nextErrors.deadline ||
+      nextErrors.pickupAt ||
+      nextErrors.assigneeIds
+    )
+      setStep(1);
+    else setStep(2);
+  }
+  function nextStep() {
+    const nextErrors = step === 0 ? taskErrors() : scheduleErrors();
+    if (Object.keys(nextErrors).length) {
+      showErrors(nextErrors);
       return;
     }
+    setError('');
+    setErrors({});
+    setStep(step === 0 ? 1 : 2);
+  }
+  function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (step === 0) {
+      nextStep();
+      return;
+    }
+    const nextErrors = { ...taskErrors(), ...scheduleErrors() };
+    if (draft.checklist.some((item) => !item.label.trim()))
+      nextErrors.checklist = 'Add a description or remove each empty step.';
+    if (Object.keys(nextErrors).length) {
+      showErrors(nextErrors);
+      return;
+    }
+    const deadline = parseProductionDateTime(
+      draft.deadline,
+      task?.deadline,
+      formTimeZone,
+    )!;
+    const pickup = draft.pickupAt
+      ? parseProductionDateTime(
+          draft.pickupAt,
+          task ? (task.pickupAt ?? pickupDate(task)) : undefined,
+          formTimeZone,
+        )
+      : undefined;
+    const selectedProduct = library.products.find(
+      (product) => product.id === draft.productId,
+    );
     const id =
       task?.id ?? 'BB-' + crypto.randomUUID().slice(0, 8).toUpperCase();
     if (!task && existingIds.includes(id)) {
@@ -279,7 +337,7 @@ export function TaskForm({
     onSave({
       id,
       workspaceId: task?.workspaceId ?? workspaceId,
-      title,
+      title: draft.title.trim(),
       description: draft.description.trim(),
       customer: draft.customer.trim(),
       category: draft.category,
@@ -339,15 +397,44 @@ export function TaskForm({
             <X size={20} />
           </button>
         </header>
-        <form onSubmit={submit} className="task-form" noValidate>
+        <nav className="task-form-steps" aria-label="Task setup steps">
+          {(
+            [
+              { label: 'Task', Icon: ClipboardList },
+              { label: 'Schedule', Icon: CalendarClock },
+              { label: 'Instructions', Icon: CookingPot },
+            ] as const
+          ).map(({ label, Icon }, index) => (
+            <button
+              key={label}
+              type="button"
+              aria-current={step === index ? 'step' : undefined}
+              onClick={() => {
+                setStep(index as 0 | 1 | 2);
+                setError('');
+              }}
+            >
+              <Icon size={17} aria-hidden="true" />
+              {label}
+            </button>
+          ))}
+        </nav>
+        <form
+          onSubmit={submit}
+          className="task-form task-setup-form"
+          noValidate
+        >
           {error && (
-            <p role="alert" className="form-error">
+            <p ref={errorRef} tabIndex={-1} role="alert" className="form-error">
               {error}
             </p>
           )}
           <section
             className="task-form-group"
             aria-label="Task details"
+            id="task-step-0"
+            tabIndex={-1}
+            hidden={step !== 0}
           >
             <fieldset className="task-type-selector form-field-full">
               <legend>Task type</legend>
@@ -401,31 +488,6 @@ export function TaskForm({
               {errors.title && (
                 <span id="title-error" className="field-error">
                   {errors.title}
-                </span>
-              )}
-            </label>
-            <label
-              className={`form-field form-field-full ${errors.description ? 'has-error' : ''}`}
-            >
-              <span className="task-field-label">
-                <FileText size={15} aria-hidden="true" />
-                Description
-              </span>
-              <textarea
-                className={errors.description ? 'field-invalid' : undefined}
-                aria-invalid={Boolean(errors.description)}
-                aria-describedby={
-                  errors.description ? 'description-error' : undefined
-                }
-                rows={2}
-                maxLength={500}
-                value={draft.description}
-                onChange={(event) => update('description', event.target.value)}
-                placeholder="Describe what needs to be prepared or completed..."
-              />
-              {errors.description && (
-                <span id="description-error" className="field-error">
-                  {errors.description}
                 </span>
               )}
             </label>
@@ -501,43 +563,32 @@ export function TaskForm({
                 </span>
               )}
             </label>
-            {(['productionQuantity', 'size', 'flavor'] as const).map(
-              (field) => (
-                <label
-                  className={`form-field ${errors[field as keyof FieldErrors] ? 'has-error' : ''}`}
-                  key={field}
-                >
-                  <span className="task-field-label">
-                    {field === 'productionQuantity' ? (
-                      <Hash size={15} aria-hidden="true" />
-                    ) : field === 'size' ? (
-                      <Ruler size={15} aria-hidden="true" />
-                    ) : (
-                      <CakeSlice size={15} aria-hidden="true" />
-                    )}
-                    {field === 'productionQuantity'
-                      ? 'Quantity'
-                      : field === 'size'
-                        ? 'Size / Dimensions'
-                        : 'Flavor / Filling'}
-                  </span>
-                  <input
-                    type={field === 'productionQuantity' ? 'number' : 'text'}
-                    min={field === 'productionQuantity' ? 1 : undefined}
-                    step={field === 'productionQuantity' ? 1 : undefined}
-                    maxLength={150}
-                    value={draft[field]}
-                    aria-invalid={!!errors[field as keyof FieldErrors]}
-                    onChange={(e) => update(field, e.target.value)}
-                  />
-                  {errors[field as keyof FieldErrors] && (
-                    <span className="field-error">
-                      {errors[field as keyof FieldErrors]}
-                    </span>
-                  )}
-                </label>
-              ),
-            )}
+            <label
+              className={`form-field ${errors.productionQuantity ? 'has-error' : ''}`}
+            >
+              <span className="task-field-label">
+                <Hash size={15} aria-hidden="true" />
+                Quantity
+              </span>
+              <input
+                type="number"
+                min={1}
+                step={1}
+                value={draft.productionQuantity}
+                aria-invalid={!!errors.productionQuantity}
+                aria-describedby={
+                  errors.productionQuantity ? 'quantity-error' : undefined
+                }
+                onChange={(event) =>
+                  update('productionQuantity', event.target.value)
+                }
+              />
+              {errors.productionQuantity && (
+                <span id="quantity-error" className="field-error">
+                  {errors.productionQuantity}
+                </span>
+              )}
+            </label>
             {draft.taskType === 'customer_related' && (
               <>
                 <label
@@ -564,24 +615,96 @@ export function TaskForm({
                     </span>
                   )}
                 </label>
-                <label className="form-field">
-                  <span className="task-field-label">
-                    <Hash size={15} aria-hidden="true" />
-                    Linked Order ID
-                  </span>
-                  <input
-                    maxLength={50}
-                    value={draft.orderId}
-                    onChange={(event) => update('orderId', event.target.value)}
-                    placeholder="External order reference"
-                  />
-                </label>
               </>
             )}
+            <details
+              className="task-form-extras form-field-full"
+              {...(task?.description ||
+              task?.size ||
+              task?.flavor ||
+              task?.orderId
+                ? { open: true }
+                : {})}
+            >
+              <summary>
+                <span>
+                  <Package size={17} aria-hidden="true" />
+                  More product details
+                </span>
+                <ChevronDown size={17} aria-hidden="true" />
+              </summary>
+              <div className="task-form-extras-fields">
+                <label
+                  className={`form-field form-field-full ${errors.description ? 'has-error' : ''}`}
+                >
+                  <span className="task-field-label">
+                    <FileText size={15} aria-hidden="true" />
+                    Description
+                  </span>
+                  <textarea
+                    className={errors.description ? 'field-invalid' : undefined}
+                    aria-invalid={Boolean(errors.description)}
+                    aria-describedby={
+                      errors.description ? 'description-error' : undefined
+                    }
+                    rows={2}
+                    maxLength={500}
+                    value={draft.description}
+                    onChange={(event) =>
+                      update('description', event.target.value)
+                    }
+                    placeholder="Describe what needs to be prepared or completed..."
+                  />
+                  {errors.description && (
+                    <span id="description-error" className="field-error">
+                      {errors.description}
+                    </span>
+                  )}
+                </label>
+                {(['size', 'flavor'] as const).map((field) => (
+                  <label className="form-field" key={field}>
+                    <span className="task-field-label">
+                      {field === 'size' ? (
+                        <Ruler size={15} aria-hidden="true" />
+                      ) : (
+                        <CakeSlice size={15} aria-hidden="true" />
+                      )}
+                      {field === 'size'
+                        ? 'Size / Dimensions'
+                        : 'Flavor / Filling'}
+                    </span>
+                    <input
+                      maxLength={150}
+                      value={draft[field]}
+                      onChange={(event) => update(field, event.target.value)}
+                    />
+                  </label>
+                ))}
+                {draft.taskType === 'customer_related' && (
+                  <label className="form-field">
+                    <span className="task-field-label">
+                      <Hash size={15} aria-hidden="true" />
+                      Linked Order ID
+                    </span>
+                    <input
+                      maxLength={50}
+                      value={draft.orderId}
+                      onChange={(event) =>
+                        update('orderId', event.target.value)
+                      }
+                      placeholder="External order reference"
+                    />
+                  </label>
+                )}
+              </div>
+            </details>
           </section>
           <section
             className="task-form-group"
             aria-labelledby="task-scheduling-heading"
+            id="task-step-1"
+            tabIndex={-1}
+            hidden={step !== 1}
           >
             <h3
               id="task-scheduling-heading"
@@ -689,44 +812,80 @@ export function TaskForm({
                 </span>
               )}
             </fieldset>
-            <label className="form-field">
-              <span className="task-field-label">
-                <Flag size={15} aria-hidden="true" />
-                Priority
-              </span>
-              <select
-                value={draft.priority}
-                onChange={(event) =>
-                  update('priority', event.target.value as Draft['priority'])
-                }
-              >
-                <option>Low</option>
-                <option>Normal</option>
-                <option>High</option>
-              </select>
-            </label>
-            <label className="form-field">
-              <span className="task-field-label">
-                <Columns3 size={15} aria-hidden="true" />
-                Status
-              </span>
-              <select
-                value={draft.status}
-                onChange={(event) =>
-                  update('status', event.target.value as Status)
-                }
-              >
-                {statuses.map((status) => (
-                  <option key={status.value} value={status.value}>
-                    {status.label}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <details
+              className="task-form-extras form-field-full"
+              {...(task &&
+              (task.priority !== preferences.defaultPriority ||
+                task.status !== 'todo')
+                ? { open: true }
+                : {})}
+            >
+              <summary>
+                <span>
+                  <Flag size={17} aria-hidden="true" />
+                  Priority &amp; status
+                </span>
+                <span className="task-form-extra-value">
+                  {draft.priority} ·{' '}
+                  {statuses.find((item) => item.value === draft.status)?.label}
+                </span>
+                <ChevronDown size={17} aria-hidden="true" />
+              </summary>
+              <div className="task-form-extras-fields">
+                <label className="form-field">
+                  <span className="task-field-label">
+                    <Flag size={15} aria-hidden="true" />
+                    Priority
+                  </span>
+                  <select
+                    value={draft.priority}
+                    onChange={(event) =>
+                      update(
+                        'priority',
+                        event.target.value as Draft['priority'],
+                      )
+                    }
+                  >
+                    <option>Low</option>
+                    <option>Normal</option>
+                    <option>High</option>
+                  </select>
+                </label>
+                <label className="form-field">
+                  <span className="task-field-label">
+                    <Columns3 size={15} aria-hidden="true" />
+                    Status
+                  </span>
+                  <select
+                    value={draft.status}
+                    onChange={(event) =>
+                      update('status', event.target.value as Status)
+                    }
+                  >
+                    {statuses.map((status) => (
+                      <option key={status.value} value={status.value}>
+                        {status.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+            </details>
+            <button
+              className="task-setup-instructions form-field-full"
+              type="button"
+              onClick={nextStep}
+            >
+              <Plus size={17} aria-hidden="true" />
+              Add allergy notes &amp; checklist
+            </button>
           </section>
           <section
             className="task-form-group"
             aria-labelledby="task-instructions-heading"
+            id="task-step-2"
+            tabIndex={-1}
+            hidden={step !== 2}
           >
             <h3
               id="task-instructions-heading"
@@ -853,15 +1012,35 @@ export function TaskForm({
           </section>
           <footer className="task-form-footer">
             <button
-              className="button button-outline"
+              className="button button-outline task-setup-back"
               type="button"
-              onClick={onClose}
+              onClick={() => {
+                if (step === 0) onClose();
+                else {
+                  setStep(step === 2 ? 1 : 0);
+                  setError('');
+                }
+              }}
             >
-              Cancel
+              {step === 0 ? 'Cancel' : 'Back'}
             </button>
-            <button className="button button-primary" type="submit">
-              {task ? 'Save changes' : 'Create task'}
-            </button>
+            {step === 0 ? (
+              <button
+                key="next"
+                className="button button-primary"
+                type="submit"
+              >
+                Next: Schedule
+              </button>
+            ) : (
+              <button
+                key="save"
+                className="button button-primary"
+                type="submit"
+              >
+                {task ? 'Save changes' : 'Create task'}
+              </button>
+            )}
           </footer>
         </form>
       </div>

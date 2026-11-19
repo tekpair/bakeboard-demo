@@ -1008,6 +1008,7 @@ textarea {
   color: var(--cream);
 }
 .footer {
+  --footer-logo-width: 180px;
   border: 0;
   padding-block: 45px;
   gap: 48px;
@@ -1017,7 +1018,7 @@ textarea {
   gap: 17px;
 }
 .footer-brand .brand-horizontal {
-  width: 180px;
+  width: var(--footer-logo-width);
 }
 .footer-brand p {
   color: var(--cream);
@@ -1036,6 +1037,10 @@ textarea {
   line-height: 1.8;
 }
 .footer-group h2 {
+  display: flex;
+  align-items: center;
+  min-height: calc(var(--footer-logo-width) * 0.326613);
+  line-height: 1.2;
   color: var(--cream);
   font-size: 24px;
   margin-bottom: 17px;
@@ -1326,11 +1331,12 @@ textarea {
     gap: 30px;
   }
   .footer {
+    --footer-logo-width: 160px;
     gap: 30px;
     grid-template-columns: 1.5fr repeat(3, minmax(0, 1fr));
   }
   .footer-brand .brand-horizontal {
-    width: 160px;
+    width: var(--footer-logo-width);
   }
 }
 @media (max-width: 600px) {
@@ -1729,6 +1735,7 @@ textarea {
     font-size: 15px;
   }
   .footer {
+    --footer-logo-width: 168px;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 33px 17px;
     padding-block: 36px;
@@ -1737,12 +1744,13 @@ textarea {
     grid-column: 1 / -1;
   }
   .footer-brand .brand-horizontal {
-    width: 168px;
+    width: var(--footer-logo-width);
   }
   .footer-brand p.footer-description {
     max-width: 280px;
   }
   .footer-group h2 {
+    min-height: 0;
     font-size: 24px;
   }
   .footer-group nav {
