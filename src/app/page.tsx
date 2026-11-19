@@ -1,6 +1,7 @@
 import { MarketingHeader, Footer } from '@/components/marketing';
 import { PricingPlans } from '@/components/pricing-plans';
 import { MarketingImageSlot } from '@/components/marketing-image-slot';
+import { OverviewDevices } from '@/components/overview-devices';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -53,7 +54,7 @@ export default function HomePage() {
               </p>
             </div>
             <div className="home-hero-product">
-              <MarketingImageSlot kind="board" />
+              <OverviewDevices />
               <div className="home-hero-sticker">
                 <ListChecks size={23} aria-hidden="true" />
                 <span>
@@ -93,7 +94,7 @@ export default function HomePage() {
               },
               {
                 Icon: UsersRound,
-                title: 'Staff can follow along',
+                title: 'Staff can view tasks',
                 text: 'Assign work, follow checklist progress, and let each staff member focus on their own task list.',
                 label: 'My Tasks',
               },
